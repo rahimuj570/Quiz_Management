@@ -35,7 +35,7 @@ background: antiquewhite;
 		<ul class="nav_ul">
 			<li><a href="#">LOGO</a></li>
 			<li><a href="#">Home</a></li>
-			<li><a href="#">Pending Users</a></li>
+			<li><a href="pending_users.jsp">Pending Users</a></li>
 		</ul>
 	</nav>
 	<center><h1>ADMIN DASHBOARD</h1></center>
