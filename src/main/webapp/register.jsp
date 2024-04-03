@@ -1,3 +1,4 @@
+<%@page import="helper.ConnectionProvider"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -13,6 +14,33 @@
 	align-items: center;
 	height: 100vh;
 	justify-content: center
+}
+
+@keyframes spiner-1{
+0%{
+transform:rotate(0deg);
+}
+25%{
+transform:rotate(90deg);
+}
+50%{
+transform:rotate(180deg);
+}
+75%{
+transform:rotate(270deg);
+}
+100%{
+transform:rotate(260deg);
+}
+}
+#spiner{
+width: 50px;
+background: transparent;
+border-left: 3px solid #01b8ff;
+border-top:3px solid #f706ff;
+height: 50px;
+border-radius: 100%;
+animation: spiner-1 1s ease-in 0s infinite alternate;
 }
 </style>
 </head>
@@ -47,7 +75,45 @@
 			<input name="btn" id="btn" type="submit" value="Register" /> <input
 				name="btn2" id="btn2" type="reset" value="Reset" />
 		</div>
-
+		<p><a href="login.jsp">Already have an account?</a></p>
+	<div id="spiner"></div>
 	</form>
 </body>
+<script>
+	let spiner = document.getElementById('spiner');
+	spiner.style.display='none';
+document.getElementById("register_form").addEventListener("submit",(e)=>{
+	spiner.style.display='block';
+	e.preventDefault();
+	let fname=e.target.fname.value;
+	let lname=e.target.lname.value;
+	let id=e.target.id.value;
+	let password=e.target.password.value;
+	let role=e.target.role.value;
+	let email=e.target.email.value;
+	const ajx = new XMLHttpRequest();
+
+	ajx.onreadystatechange=function(){
+		if(this.readyState===4){
+			spiner.style.display='none';
+			if(this.status===200){
+				if(this.responseText==0){
+					alert('Successfully Registered!')
+					window.location='login.jsp'
+				}else if(this.responseText==1062){
+					alert("ID or Email already Registered!")
+				}else{
+					alert('Something Went Wrong!')
+				}
+			}else{
+				alert('Server Error!')
+			}
+		}
+	}
+	
+	ajx.open('post','RegisterServlet',true);
+	ajx.setRequestHeader('content-type','application/x-www-form-urlencoded');
+	ajx.send("fname="+fname+"&lname="+lname+"&id="+id+"&email="+email+"&role="+role+"&password="+password);
+});
+</script>
 </html>
