@@ -39,4 +39,14 @@
     <servlet-name>ApprovedUserServlet</servlet-name>
     <url-pattern>/ApprovedUserServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>DeclineUserServlet</display-name>
+    <servlet-name>DeclineUserServlet</servlet-name>
+    <servlet-class>servlets.DeclineUserServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DeclineUserServlet</servlet-name>
+    <url-pattern>/DeclineUserServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

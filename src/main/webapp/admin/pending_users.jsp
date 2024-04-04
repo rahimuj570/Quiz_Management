@@ -99,6 +99,29 @@ tr:nth-child(even) {
 	session.removeAttribute("fail_approved");
 	}
 	%>
+	
+	<!--	============	-->
+	
+	<%
+	if (session.getAttribute("success_decline") != null) {
+	%>
+	<p class="center_txt success_txt">
+		<%=session.getAttribute("success_decline")%>
+	</p>
+	<%
+	session.removeAttribute("success_decline");
+	}
+	%>
+	<%
+	if (session.getAttribute("fail_decline") != null) {
+	%>
+	<p class="center_txt danger_txt">
+		<%=session.getAttribute("fail_decline")%>
+	</p>
+	<%
+	session.removeAttribute("fail_decline");
+	}
+	%>
 	<div style="overflow-x: auto;">
 		<table>
 			<tr>
@@ -131,7 +154,10 @@ tr:nth-child(even) {
 						<a
 							href="<%=request.getContextPath()%>/ApprovedUserServlet?user_id=<%=user.getUser_id()%>">Accept</a>
 					</button></td>
-				<td><button style="background: #ffc6c6">Reject</button></td>
+				<td><button style="background: #ffc6c6">
+						<a
+							href="<%=request.getContextPath()%>/DeclineUserServlet?user_id=<%=user.getUser_id()%>">Reject</a>
+					</button></td>
 			</tr>
 			<%
 			}

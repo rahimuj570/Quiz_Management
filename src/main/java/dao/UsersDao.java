@@ -106,4 +106,18 @@ public class UsersDao {
 		}
 		return f;
 	}
+	
+	public int declineUser(int user_id) {
+		String query = "delete from users where user_id=?";
+		int f = 0;
+		try {
+			PreparedStatement pst = con.prepareStatement(query);
+			pst.setInt(1, user_id);
+			f = pst.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e + "from userDao; method declineUser; line 119");
+		}
+		return f;
+	}
 }
