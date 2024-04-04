@@ -92,4 +92,18 @@ public class UsersDao {
 		}
 		return uList;
 	}
+
+	public int approvedUser(int user_id) {
+		String query = "update users set user_is_approved=1 where user_id=?";
+		int f = 0;
+		try {
+			PreparedStatement pst = con.prepareStatement(query);
+			pst.setInt(1, user_id);
+			f = pst.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e + "from userDao; method approbvedUser; lne 105");
+		}
+		return f;
+	}
 }

@@ -29,4 +29,14 @@
     <servlet-name>LoginServlet</servlet-name>
     <url-pattern>/LoginServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ApprovedUserServlet</display-name>
+    <servlet-name>ApprovedUserServlet</servlet-name>
+    <servlet-class>servlets.ApprovedUserServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ApprovedUserServlet</servlet-name>
+    <url-pattern>/ApprovedUserServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

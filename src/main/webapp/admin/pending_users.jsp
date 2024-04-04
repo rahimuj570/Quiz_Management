@@ -54,6 +54,14 @@ td, th {
 tr:nth-child(even) {
 	background-color: #dddddd;
 }
+
+.danger_txt {
+	color: red;
+}
+
+.success_txt {
+	color: lime;
+}
 </style>
 </head>
 <body>
@@ -71,6 +79,26 @@ tr:nth-child(even) {
 	<h1 class="center_txt">
 		Pending Users (<%=uList.size()%>)
 	</h1>
+	<%
+	if (session.getAttribute("success_approved") != null) {
+	%>
+	<p class="center_txt success_txt">
+		<%=session.getAttribute("success_approved")%>
+	</p>
+	<%
+	session.removeAttribute("success_approved");
+	}
+	%>
+	<%
+	if (session.getAttribute("fail_approved") != null) {
+	%>
+	<p class="center_txt danger_txt">
+		<%=session.getAttribute("fail_approved")%>
+	</p>
+	<%
+	session.removeAttribute("fail_approved");
+	}
+	%>
 	<div style="overflow-x: auto;">
 		<table>
 			<tr>
@@ -99,7 +127,10 @@ tr:nth-child(even) {
 				<td><%=user.getUser_first_name()%></td>
 				<td><%=user.getUser_last_name()%></td>
 				<td><%=user.getUser_email()%></td>
-				<td><button style="background: lime">Accept</button></td>
+				<td><button style="background: lime">
+						<a
+							href="<%=request.getContextPath()%>/ApprovedUserServlet?user_id=<%=user.getUser_id()%>">Accept</a>
+					</button></td>
 				<td><button style="background: #ffc6c6">Reject</button></td>
 			</tr>
 			<%
