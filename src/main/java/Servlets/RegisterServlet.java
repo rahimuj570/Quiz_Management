@@ -1,4 +1,4 @@
-package Servlets;
+package servlets;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -6,8 +6,11 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 
+import dao.UsersDao;
 import entities.Users;
+import helper.ConnectionProvider;
 
 /**
  * Servlet implementation class RegisterServlet
@@ -32,12 +35,16 @@ public class RegisterServlet extends HttpServlet {
 		Users u=new Users();
 		u.setUser_first_name(request.getParameter("fname"));
 		u.setUser_last_name(request.getParameter("lname"));
-		u.setUser_id((Integer.parseInt(request.getParameter("id"))));
+		u.setUser_id((int) (Long.parseLong(request.getParameter("id"))));
 		u.setUser_email(request.getParameter("email"));
 		u.setUser_password(request.getParameter("password"));
 		u.setUser_is_teacher(Integer.parseInt(request.getParameter("role")));
 		
 		System.out.println(u);
+		UsersDao dao = new UsersDao(ConnectionProvider.main());
+		int f = dao.saveUser(u);
+		PrintWriter out = response.getWriter();
+		out.print(f);
 	}
 
 	/**
