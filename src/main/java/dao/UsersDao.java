@@ -127,7 +127,7 @@ public class UsersDao {
 		Users u = null;
 		String query;
 		if(role==1)query = "select * from users where user_is_teacher=1 and user_is_approved=1";
-		else if(role==2)query = "select * from users where user_is_teacher=0 and user_is_admin=0 and and user_is_approved=1";
+		else if(role==2)query = "select * from users where user_is_teacher=0 and user_is_admin=0 and user_is_approved=1";
 		else query = "select * from users where user_is_admin=1";
 		try {
 			PreparedStatement pst = con.prepareStatement(query);
