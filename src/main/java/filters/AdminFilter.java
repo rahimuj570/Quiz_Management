@@ -48,7 +48,6 @@ public class AdminFilter extends HttpFilter implements Filter {
 		Users u = new Users();
 		u = (Users) s.getAttribute("current_user");
 		if (u != null) {
-			System.out.println(u.getUser_is_admin());
 			if (u.getUser_is_admin() == 1) {
 				// pass the request along the filter chain
 				chain.doFilter(request, response);

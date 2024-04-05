@@ -7,5 +7,6 @@
 		<li><a href="show_teachers.jsp">Show Teachers</a></li>
 		<li><a href="show_students.jsp">Show Student</a></li>
 		<li><a href="show_admins.jsp">Show Administrators</a></li>
+		<li><a href="<%=request.getContextPath()%>/LogoutServlet">LOGOUT</a></li>
 	</ul>
 </nav>
