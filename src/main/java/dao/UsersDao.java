@@ -106,7 +106,7 @@ public class UsersDao {
 		}
 		return f;
 	}
-	
+
 	public int declineUser(int user_id) {
 		String query = "delete from users where user_id=?";
 		int f = 0;
@@ -117,6 +117,48 @@ public class UsersDao {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			System.out.println(e + "from userDao; method declineUser; line 119");
+		}
+		return f;
+	}
+
+	public ArrayList<Users> getUsersList(int role) {
+		// role:=> 0=admin; 1=teacher; 2=student;
+		ArrayList<Users> uList = new ArrayList<Users>();
+		Users u = null;
+		String query;
+		if(role==1)query = "select * from users where user_is_teacher=1 and user_is_approved=1";
+		else if(role==2)query = "select * from users where user_is_teacher=0 and user_is_admin=0 and and user_is_approved=1";
+		else query = "select * from users where user_is_admin=1";
+		try {
+			PreparedStatement pst = con.prepareStatement(query);
+			ResultSet res = pst.executeQuery();
+			while (res.next()) {
+				u = new Users();
+				u.setUser_email(res.getString("user_email"));
+				u.setUser_id(res.getInt("user_id"));
+				u.setUser_first_name(res.getString("user_first_name"));
+				u.setUser_last_name(res.getString("user_last_name"));
+				u.setUser_is_teacher(res.getInt("user_is_teacher"));
+				u.setUser_is_admin(res.getInt("user_is_admin"));
+				uList.add(u);
+			}
+
+		} catch (SQLException e) {
+			System.out.println(e + "from usersDao ; method getUsersList; line 146");
+		}
+		return uList;
+	}
+	
+	public int makeAdmin(int user_id) {
+		String query = "update users set user_is_admin=1 where user_id=?";
+		int f = 0;
+		try {
+			PreparedStatement pst = con.prepareStatement(query);
+			pst.setInt(1, user_id);
+			f = pst.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e + "from userDao; method makeAdmin; lne 160");
 		}
 		return f;
 	}

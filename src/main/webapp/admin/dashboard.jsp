@@ -5,39 +5,10 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Dashboard - Admin</title>
-<style type="text/css">
-.nav_ul {
-	display: flex;
-	list-style: none;
-	gap: 10px;
-	border-bottom: 2px solid cyan;
-	padding: 2px;
-	border-radius: 10px;
-}
-
-.nav_ul li {
-	border: 2px solid cyan;
-	padding: 2px 5px;
-	border-radius: 5px;
-	transition:.3s;
-}
-.nav_ul a {
-	text-decoration: none;
-	color:black;
-}
-.nav_ul li:hover {
-background: antiquewhite;
-}
-</style>
+<link rel="stylesheet" type="text/css" href="admin.css">
 </head>
 <body>
-	<nav>
-		<ul class="nav_ul">
-			<li><a href="#">LOGO</a></li>
-			<li><a href="#">Home</a></li>
-			<li><a href="pending_users.jsp">Pending Users</a></li>
-		</ul>
-	</nav>
+	<%@include file="admin_nav.jsp" %>
 	<center><h1>ADMIN DASHBOARD</h1></center>
 </body>
 </html>

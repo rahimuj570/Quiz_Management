@@ -9,73 +9,14 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Pending Users</title>
-<style type="text/css">
-.nav_ul {
-	display: flex;
-	list-style: none;
-	gap: 10px;
-	border-bottom: 2px solid cyan;
-	padding: 2px;
-	border-radius: 10px;
-}
-
-.nav_ul li {
-	border: 2px solid cyan;
-	padding: 2px 5px;
-	border-radius: 5px;
-	transition: .3s;
-}
-
-.nav_ul a {
-	text-decoration: none;
-	color: black;
-}
-
-.nav_ul li:hover {
-	background: antiquewhite;
-}
-
-.center_txt {
-	text-align: center
-}
-
-table {
-	font-family: arial, sans-serif;
-	border-collapse: collapse;
-	width: 100%;
-}
-
-td, th {
-	border: 1px solid #dddddd;
-	text-align: left;
-	padding: 8px;
-}
-
-tr:nth-child(even) {
-	background-color: #dddddd;
-}
-
-.danger_txt {
-	color: red;
-}
-
-.success_txt {
-	color: lime;
-}
-</style>
+<link rel="stylesheet" type="text/css" href="admin.css">
 </head>
 <body>
 	<%
 	UsersDao u = new UsersDao(ConnectionProvider.main());
 	ArrayList<Users> uList = u.getUnapprovedUsers();
 	%>
-	<nav>
-		<ul class="nav_ul">
-			<li><a href="#">LOGO</a></li>
-			<li><a href="#">Home</a></li>
-			<li><a href="pending_users.jsp">Pending Users</a></li>
-		</ul>
-	</nav>
+	<%@include file="admin_nav.jsp" %>
 	<h1 class="center_txt">
 		Pending Users (<%=uList.size()%>)
 	</h1>
@@ -99,9 +40,9 @@ tr:nth-child(even) {
 	session.removeAttribute("fail_approved");
 	}
 	%>
-	
+
 	<!--	============	-->
-	
+
 	<%
 	if (session.getAttribute("success_decline") != null) {
 	%>

@@ -49,4 +49,14 @@
     <servlet-name>DeclineUserServlet</servlet-name>
     <url-pattern>/DeclineUserServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>MakeAdminServlet</display-name>
+    <servlet-name>MakeAdminServlet</servlet-name>
+    <servlet-class>servlets.MakeAdminServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MakeAdminServlet</servlet-name>
+    <url-pattern>/MakeAdminServlet</url-pattern>
+  </servlet-mapping>
 </web-app>
