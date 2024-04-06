@@ -34,7 +34,7 @@ public class MakeAdminServlet extends HttpServlet {
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		UsersDao dao = new UsersDao(ConnectionProvider.main());
-		int f = dao.makeAdmin((int) Long.parseLong(request.getParameter("user_id")));
+		int f = dao.makeAdmin(Long.parseLong(request.getParameter("user_id")));
 		HttpSession s = request.getSession();
 		if(f==0) {
 			s.setAttribute("fail_admin", "Something Went Wrong! Try Again.");

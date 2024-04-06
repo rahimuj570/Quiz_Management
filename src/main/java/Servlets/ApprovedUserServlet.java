@@ -35,7 +35,7 @@ public class ApprovedUserServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		// response.getWriter().append("Served at: ").append(request.getContextPath());
 		UsersDao dao = new UsersDao(ConnectionProvider.main());
-		int f = dao.approvedUser((int) (Long.parseLong(request.getParameter("user_id"))));
+		int f = dao.approvedUser((Long.parseLong(request.getParameter("user_id"))));
 		System.out.println(f);
 		HttpSession s = request.getSession();
 		if (f == 0) {

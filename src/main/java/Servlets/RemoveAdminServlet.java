@@ -14,25 +14,23 @@ import entities.Users;
 import helper.ConnectionProvider;
 
 /**
- * Servlet implementation class DeclineUserServlet
+ * Servlet implementation class RemoveAdminServlet
  */
-public class DeclineUserServlet extends HttpServlet {
+public class RemoveAdminServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public RemoveAdminServlet() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
 
 	/**
-	 * @see HttpServlet#HttpServlet()
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	public DeclineUserServlet() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		UsersDao dao = new UsersDao(ConnectionProvider.main());
 		HttpSession s = request.getSession();
@@ -40,7 +38,7 @@ public class DeclineUserServlet extends HttpServlet {
 		if (me.getUser_id() == ((Long.parseLong(request.getParameter("user_id"))))) {
 			s.setAttribute("fail_decline", "Failed To Decline! Please Try Again.");
 		} else {
-			int f = dao.declineUser( (Long.parseLong(request.getParameter("user_id"))));
+			int f = dao.removeAdmin( (Long.parseLong(request.getParameter("user_id"))));
 			System.out.println(f);
 			if (f == 0) {
 				s.setAttribute("fail_decline", "Failed To Decline! Please Try Again.");
@@ -50,13 +48,10 @@ public class DeclineUserServlet extends HttpServlet {
 		}
 		response.sendRedirect(request.getHeader("referer"));
 	}
-
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}

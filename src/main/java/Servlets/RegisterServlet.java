@@ -35,7 +35,7 @@ public class RegisterServlet extends HttpServlet {
 		Users u=new Users();
 		u.setUser_first_name(request.getParameter("fname"));
 		u.setUser_last_name(request.getParameter("lname"));
-		u.setUser_id((int) (Long.parseLong(request.getParameter("id"))));
+		u.setUser_id(Long.parseLong(request.getParameter("id")));
 		u.setUser_email(request.getParameter("email"));
 		u.setUser_password(request.getParameter("password"));
 		u.setUser_is_teacher(Integer.parseInt(request.getParameter("role")));

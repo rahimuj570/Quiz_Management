@@ -3,7 +3,7 @@
 <%@page import="helper.ConnectionProvider"%>
 <%@page import="dao.UsersDao"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -63,11 +63,24 @@
 						style="background: lime">
 						<a href="#">Details</a>
 					</button></td>
-				<td><button
-						onclick="removeUser('<%=request.getContextPath()%>/DeclineUserServlet?user_id=<%=user.getUser_id()%>')"
-						style="background: #ffc6c6">
+				<td>
+					<%
+					Users me = new Users();
+					me = (Users) session.getAttribute("current_user");
+					if (user.getUser_id() == me.getUser_id()) {
+					%>
+					<button disabled>
 						<a href="#">Remove</a>
-					</button></td>
+					</button> <%
+ 					} else {
+ 							%>
+					<button
+						onclick="removeUser('<%=request.getContextPath()%>/RemoveAdminServlet?user_id=<%=user.getUser_id()%>')"
+						style="background: #ffc6c6">
+						Remove
+					</button> <%
+ 						}%>
+				</td>
 			</tr>
 			<%
 			}
@@ -78,7 +91,7 @@
 </body>
 <script type="text/javascript">
 let removeUser=(e)=>{
-	if(confirm('Are you sure to delete this user from the database?')){
+	if(confirm('Are you sure to remove this user as admin?')){
 		location=e;
 	}
 }

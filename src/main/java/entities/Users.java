@@ -1,7 +1,7 @@
 package entities;
 
 public class Users {
-	int user_id;
+	Long user_id;
 	String user_first_name;
 	String user_last_name;
 	String user_email;
@@ -11,10 +11,10 @@ public class Users {
 	int user_is_approved=0;
 	
 	
-	public int getUser_id() {
+	public Long getUser_id() {
 		return user_id;
 	}
-	public void setUser_id(int user_id) {
+	public void setUser_id(Long user_id) {
 		this.user_id = user_id;
 	}
 	public String getUser_first_name() {
@@ -60,7 +60,7 @@ public class Users {
 	public void setUser_is_approved(int user_is_approved) {
 		this.user_is_approved = user_is_approved;
 	}
-	public Users(int user_id, String user_first_name, String user_last_name, String user_email, String user_password,
+	public Users(Long user_id, String user_first_name, String user_last_name, String user_email, String user_password,
 			String user_institute, int user_is_teacher, int user_is_admin, int user_is_approved) {
 		super();
 		this.user_id = user_id;

@@ -21,7 +21,7 @@ public class UsersDao {
 		String query = "insert into users (user_id,user_first_name,user_last_name,user_email,user_password,user_is_teacher,user_is_admin,user_is_approved) value(?,?,?,?,?,?,?,?)";
 		try {
 			PreparedStatement pst = con.prepareStatement(query);
-			pst.setInt(1, u.getUser_id());
+			pst.setLong(1, u.getUser_id());
 			pst.setString(2, u.getUser_first_name());
 			pst.setString(3, u.getUser_last_name());
 			pst.setString(4, u.getUser_email());
@@ -47,17 +47,18 @@ public class UsersDao {
 			PreparedStatement pst;
 			if (through.equals("email")) {
 				pst = con.prepareStatement(query_mail);
+				pst.setString(1, email_id);
 			} else {
 				pst = con.prepareStatement(query_id);
+				pst.setLong(1, Long.parseLong(email_id));
 			}
-			pst.setString(1, email_id);
 			pst.setString(2, password);
 			ResultSet res = pst.executeQuery();
 			while (res.next()) {
 				u = new Users();
 				u.setUser_first_name(res.getString("user_first_name"));
 				u.setUser_last_name(res.getString("user_last_name"));
-				u.setUser_id(res.getInt("user_id"));
+				u.setUser_id(res.getLong("user_id"));
 				u.setUser_email(res.getString("user_email"));
 				u.setUser_password(res.getString("user_password"));
 				u.setUser_is_teacher(res.getInt("user_is_teacher"));
@@ -80,10 +81,13 @@ public class UsersDao {
 			while (res.next()) {
 				u = new Users();
 				u.setUser_email(res.getString("user_email"));
-				u.setUser_id(res.getInt("user_id"));
+
+				//System.out.println(res.getLong("user_id"));
+				u.setUser_id(res.getLong("user_id"));
 				u.setUser_first_name(res.getString("user_first_name"));
 				u.setUser_last_name(res.getString("user_last_name"));
 				u.setUser_is_teacher(res.getInt("user_is_teacher"));
+				//System.out.println(u.getUser_id());
 				uList.add(u);
 			}
 
@@ -93,12 +97,12 @@ public class UsersDao {
 		return uList;
 	}
 
-	public int approvedUser(int user_id) {
+	public int approvedUser(Long user_id) {
 		String query = "update users set user_is_approved=1 where user_id=?";
 		int f = 0;
 		try {
 			PreparedStatement pst = con.prepareStatement(query);
-			pst.setInt(1, user_id);
+			pst.setLong(1, user_id);
 			f = pst.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -107,12 +111,12 @@ public class UsersDao {
 		return f;
 	}
 
-	public int declineUser(int user_id) {
+	public int declineUser(Long user_id) {
 		String query = "delete from users where user_id=?";
 		int f = 0;
 		try {
 			PreparedStatement pst = con.prepareStatement(query);
-			pst.setInt(1, user_id);
+			pst.setLong(1, user_id);
 			f = pst.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -135,7 +139,7 @@ public class UsersDao {
 			while (res.next()) {
 				u = new Users();
 				u.setUser_email(res.getString("user_email"));
-				u.setUser_id(res.getInt("user_id"));
+				u.setUser_id(res.getLong("user_id"));
 				u.setUser_first_name(res.getString("user_first_name"));
 				u.setUser_last_name(res.getString("user_last_name"));
 				u.setUser_is_teacher(res.getInt("user_is_teacher"));
@@ -149,12 +153,12 @@ public class UsersDao {
 		return uList;
 	}
 	
-	public int makeAdmin(int user_id) {
+	public int makeAdmin(Long user_id) {
 		String query = "update users set user_is_admin=1 where user_id=?";
 		int f = 0;
 		try {
 			PreparedStatement pst = con.prepareStatement(query);
-			pst.setInt(1, user_id);
+			pst.setLong(1, user_id);
 			f = pst.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -162,4 +166,18 @@ public class UsersDao {
 		}
 		return f;
 	}
+	public int removeAdmin(Long user_id) {
+		String query = "update users set user_is_admin=0 where user_id=?";
+		int f = 0;
+		try {
+			PreparedStatement pst = con.prepareStatement(query);
+			pst.setLong(1, user_id);
+			f = pst.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e + "from userDao; method removeAdmin; line 178");
+		}
+		return f;
+	}
+
 }

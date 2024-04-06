@@ -30,7 +30,7 @@ color:red;
 	<%session.removeAttribute("not-approved");} %>
 		<div>
 			<label for='email_id'>Email or ID</label> <br /> <input
-				name='email_id' type='email' required />
+				name='email_id' type='text' required />
 		</div>
 		<div>
 			<label for='email_id'>Password</label> <br /> <input name='password'
