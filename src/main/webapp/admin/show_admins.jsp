@@ -67,7 +67,7 @@
 					<%
 					Users me = new Users();
 					me = (Users) session.getAttribute("current_user");
-					if (user.getUser_id() == me.getUser_id()) {
+					if (user.getUser_id().equals(me.getUser_id())) {
 					%>
 					<button disabled>
 						<a href="#">Remove</a>
