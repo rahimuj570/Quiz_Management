@@ -7,6 +7,14 @@
 		<li><a href="show_teachers.jsp">Show Teachers</a></li>
 		<li><a href="show_students.jsp">Show Student</a></li>
 		<li><a href="show_admins.jsp">Show Administrators</a></li>
+		<%
+		if (me.getUser_is_teacher() == 1) {
+		%>
+		<li><a href="<%=request.getContextPath()%>/teacher/dashboard.jsp">Switch
+				to Teacher Privilege</a></li>
+		<%
+		}
+		%>
 		<li><a href="<%=request.getContextPath()%>/LogoutServlet">LOGOUT</a></li>
 	</ul>
 </nav>

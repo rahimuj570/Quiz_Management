@@ -1,5 +1,6 @@
+<%@page import="entities.Users"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,7 +9,8 @@
 <link rel="stylesheet" type="text/css" href="./teacher.css">
 </head>
 <body>
-	<%@include file="./teacher_nav.jsp" %>
+	<%Users me = (Users)session.getAttribute("current_user"); %>
+	<%@include file="./teacher_nav.jsp"%>
 	<h2 class="center_txt">Teacher Dashboard</h2>
 </body>
 </html>
