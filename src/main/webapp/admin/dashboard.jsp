@@ -9,7 +9,6 @@
 <link rel="stylesheet" type="text/css" href="admin.css">
 </head>
 <body>
-	<%Users me = (Users)session.getAttribute("current_user"); %>
 	<%@include file="admin_nav.jsp" %>
 	<center><h1>ADMIN DASHBOARD</h1></center>
 </body>

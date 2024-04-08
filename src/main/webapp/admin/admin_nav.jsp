@@ -1,4 +1,5 @@
 
+<%@page import="entities.Users"%>
 <nav>
 	<ul class="nav_ul">
 		<li><a href="#">LOGO</a></li>
@@ -8,6 +9,7 @@
 		<li><a href="show_students.jsp">Show Student</a></li>
 		<li><a href="show_admins.jsp">Show Administrators</a></li>
 		<%
+		Users me = (Users) session.getAttribute("current_user");
 		if (me.getUser_is_teacher() == 1) {
 		%>
 		<li><a href="<%=request.getContextPath()%>/teacher/dashboard.jsp">Switch

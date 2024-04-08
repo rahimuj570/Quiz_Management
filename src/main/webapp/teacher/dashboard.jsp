@@ -9,8 +9,8 @@
 <link rel="stylesheet" type="text/css" href="./teacher.css">
 </head>
 <body>
-	<%Users me = (Users)session.getAttribute("current_user"); %>
 	<%@include file="./teacher_nav.jsp"%>
 	<h2 class="center_txt">Teacher Dashboard</h2>
 </body>
+ <script src="./teacher.js"></script> 
 </html>

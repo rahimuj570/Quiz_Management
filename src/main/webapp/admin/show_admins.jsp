@@ -65,21 +65,18 @@
 					</button></td>
 				<td>
 					<%
-					Users me = new Users();
-					me = (Users) session.getAttribute("current_user");
 					if (user.getUser_id().equals(me.getUser_id())) {
 					%>
 					<button disabled>
 						<a href="#">Remove</a>
 					</button> <%
- 					} else {
- 							%>
+ } else {
+ %>
 					<button
 						onclick="removeUser('<%=request.getContextPath()%>/RemoveAdminServlet?user_id=<%=user.getUser_id()%>')"
-						style="background: #ffc6c6">
-						Remove
-					</button> <%
- 						}%>
+						style="background: #ffc6c6">Remove</button> <%
+ }
+ %>
 				</td>
 			</tr>
 			<%
