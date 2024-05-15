@@ -9,7 +9,7 @@
 <link rel="stylesheet" type="text/css" href="admin.css">
 </head>
 <body>
-	<%@include file="admin_nav.jsp" %>
+	<%@include file="./admin_nav.jsp" %>
 	<center><h1>ADMIN DASHBOARD</h1></center>
 </body>
 </html>
