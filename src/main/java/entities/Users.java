@@ -11,7 +11,7 @@ public class Users {
 	int user_is_teacher;
 	int user_is_admin=0;
 	int user_is_approved=0;
-	int user_is_varified=1;
+	int user_is_varified=0;
 	
 	
 	

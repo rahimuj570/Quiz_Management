@@ -49,6 +49,10 @@ public class LoginServlet extends HttpServlet {
 		} else if (u.getUser_is_approved() == 0) {
 			s.setAttribute("not-approved", "Your account is not approved yet!");
 			response.sendRedirect("login.jsp");
+		} else if (u.getUser_is_varified() == 0) {
+			s.setAttribute("verify_user_id", u.getUser_id());
+			s.setAttribute("current_user", u);
+			response.sendRedirect("verify.jsp");
 		} else {
 			s.setAttribute("current_user", u);
 			if (u.getUser_is_teacher() == 1) {

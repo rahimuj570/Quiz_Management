@@ -9,6 +9,7 @@ import jakarta.mail.Session;
 import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+import secret.EMAIL_KEY;
 
 public class GEmailSender {
 	public boolean sendEmail(String to, String from, String subject, String text) {
@@ -21,7 +22,7 @@ public class GEmailSender {
 		props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
 
 		String username = "rujr2002";
-		String password = "";
+		String password = EMAIL_KEY.getKey() ;
 
 		Session session = Session.getInstance(props, new Authenticator() {
 			@Override

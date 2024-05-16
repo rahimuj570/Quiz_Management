@@ -5,13 +5,19 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import secret.VERIFY_CODE;
+
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Random;
 
 import dao.UsersDao;
+import dao.VerifyPinsDao;
 import entities.Users;
+import entities.VerifyPin;
 import helper.ConnectionProvider;
 import helper.GEmailSender;
+import helper.GeneratePinCode;
 
 /**
  * Servlet implementation class RegisterServlet
@@ -46,9 +52,15 @@ public class RegisterServlet extends HttpServlet {
 		u.setUser_batch(request.getParameter("batch"));
 
 		System.out.println(u);
+		
+		VerifyPin verify_pin = new VerifyPin();
+		verify_pin.setPin_code(GeneratePinCode.getCode());
+		verify_pin.setUser_id(u.getUser_id());
 		GEmailSender gEmailSender = new GEmailSender();
-		gEmailSender.sendEmail("rahimuj570@gmail.com", "rujr2002@gmail.com", "TEST SUBJ", "test msg");
-
+		//gEmailSender.sendEmail(u.getUser_email().strip(), "rujr2002@gmail.com", "Account Verification Code for QuizeManagement", "Your varification code is this 6 characters =>  " + verifyCode+"\n   (This code will expire in 10 minutes.)");
+		VerifyPinsDao pinsDao = new VerifyPinsDao(ConnectionProvider.main());
+		//pinsDao.saveVerifyCode(verify_pin);
+		
 		/*
 		 * UsersDao dao = new UsersDao(ConnectionProvider.main()); int f =
 		 * dao.saveUser(u); PrintWriter out = response.getWriter(); out.print(f);

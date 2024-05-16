@@ -64,6 +64,7 @@ public class UsersDao {
 				u.setUser_is_teacher(res.getInt("user_is_teacher"));
 				u.setUser_is_admin(res.getInt("user_is_admin"));
 				u.setUser_is_approved(res.getInt("user_is_approved"));
+				u.setUser_is_varified(res.getInt("user_is_verify"));
 			}
 		} catch (SQLException e) {
 			System.out.println(e + "from usersDao; line 67");
@@ -82,12 +83,12 @@ public class UsersDao {
 				u = new Users();
 				u.setUser_email(res.getString("user_email"));
 
-				//System.out.println(res.getLong("user_id"));
+				// System.out.println(res.getLong("user_id"));
 				u.setUser_id(res.getLong("user_id"));
 				u.setUser_first_name(res.getString("user_first_name"));
 				u.setUser_last_name(res.getString("user_last_name"));
 				u.setUser_is_teacher(res.getInt("user_is_teacher"));
-				//System.out.println(u.getUser_id());
+				// System.out.println(u.getUser_id());
 				uList.add(u);
 			}
 
@@ -130,9 +131,12 @@ public class UsersDao {
 		ArrayList<Users> uList = new ArrayList<Users>();
 		Users u = null;
 		String query;
-		if(role==1)query = "select * from users where user_is_teacher=1 and user_is_approved=1";
-		else if(role==2)query = "select * from users where user_is_teacher=0 and user_is_admin=0 and user_is_approved=1";
-		else query = "select * from users where user_is_admin=1";
+		if (role == 1)
+			query = "select * from users where user_is_teacher=1 and user_is_approved=1";
+		else if (role == 2)
+			query = "select * from users where user_is_teacher=0 and user_is_admin=0 and user_is_approved=1";
+		else
+			query = "select * from users where user_is_admin=1";
 		try {
 			PreparedStatement pst = con.prepareStatement(query);
 			ResultSet res = pst.executeQuery();
@@ -152,7 +156,7 @@ public class UsersDao {
 		}
 		return uList;
 	}
-	
+
 	public int makeAdmin(Long user_id) {
 		String query = "update users set user_is_admin=1 where user_id=?";
 		int f = 0;
@@ -166,6 +170,7 @@ public class UsersDao {
 		}
 		return f;
 	}
+
 	public int removeAdmin(Long user_id) {
 		String query = "update users set user_is_admin=0 where user_id=?";
 		int f = 0;
@@ -176,6 +181,35 @@ public class UsersDao {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			System.out.println(e + "from userDao; method removeAdmin; line 178");
+		}
+		return f;
+	}
+
+	public int verifiedUser(Long user_id) {
+		String query = "update users set user_is_verify=1 where user_id=?";
+		int f = 0;
+		try {
+			PreparedStatement pst = con.prepareStatement(query);
+			pst.setLong(1, user_id);
+			f = pst.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e + "from userDao; method verifiedUser; lne 196");
+		}
+		return f;
+	}
+
+	public String checkExistUser(long user_id) {
+		String f = null;
+		String query = "select user_email as email from users where user_id=" + user_id;
+		try {
+			PreparedStatement pst = con.prepareStatement(query);
+			ResultSet res = pst.executeQuery();
+			while (res.next()) {
+				f = res.getString("email");
+			}
+		} catch (SQLException e) {
+			System.out.println(e + " UsersDao ; method existUser; line 211");
 		}
 		return f;
 	}
