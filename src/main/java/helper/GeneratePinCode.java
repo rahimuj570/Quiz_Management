@@ -11,7 +11,7 @@ public class GeneratePinCode {
 		StringBuilder strBuilder = new StringBuilder();
 		int index = 0;
 		while (strBuilder.length() < 6) {
-			index = (int) (rand.nextFloat() * 76);
+			index = (int) (rand.nextFloat() * 75);
 			strBuilder.append(possibleCodeCharacter.charAt(index));
 		}
 		String verifyCode = strBuilder.toString();

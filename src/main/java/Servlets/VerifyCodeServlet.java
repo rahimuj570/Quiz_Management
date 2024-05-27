@@ -52,9 +52,10 @@ public class VerifyCodeServlet extends HttpServlet {
 			if (vpin.getPin_code()==null) {
 				response.getWriter().append("request_new_pin");
 			} else if (vpin.getExpire_date().before(new Date())) {
+				dao.deleteVerifyCode((long) sc.getAttribute("verify_user_id"));
 				response.getWriter().append("expire");
 			} else {
-				if (vpin.getPin_code().equals(inputCode)) {
+				if (vpin.getPin_code().equals(inputCode) && vpin.getIs_for_reset_password()==0) {
 					response.getWriter().append("valid");
 					int f = udao.verifiedUser((long) sc.getAttribute("verify_user_id"));
 					if(f==0)response.getWriter().append("server_error");

@@ -49,7 +49,7 @@ public class ResentCodeServlet extends HttpServlet {
 			if (email != null) {
 				VerifyPinsDao dao = new VerifyPinsDao(ConnectionProvider.main());
 				VerifyPin vpin = dao.getVerifyCode((long) sc.getAttribute("verify_user_id"));
-				if (vpin.getPin_code() == null || vpin.getExpire_date().before(new Date())) {
+				if ((vpin.getPin_code() == null || vpin.getExpire_date().before(new Date()))&&vpin.getIs_for_reset_password()==0) {
 					VerifyPin verify_pin = new VerifyPin();
 					verify_pin.setPin_code(GeneratePinCode.getCode());
 					verify_pin.setUser_id((long) sc.getAttribute("verify_user_id"));
@@ -59,8 +59,12 @@ public class ResentCodeServlet extends HttpServlet {
 					// characters => " + verify_pin.getPin_code()+"\n (This code will expire in
 					// 10minutes.)");
 					VerifyPinsDao pinsDao = new VerifyPinsDao(ConnectionProvider.main());
-					pinsDao.saveVerifyCode(verify_pin);
-					response.getWriter().append("sent");
+					int f = pinsDao.saveVerifyCode(verify_pin);
+					if(f==0) {
+						response.getWriter().append("server_error");
+					}else {
+						response.getWriter().append("sent");
+					}
 				} else {
 					response.getWriter().append("not_sent");
 				}

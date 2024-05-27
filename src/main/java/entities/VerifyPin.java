@@ -5,7 +5,16 @@ import java.util.Date;
 public class VerifyPin {
 	long user_id;
 	String pin_code;
+	int is_for_reset_password;
 	Date expire_date = new Date(new Date().getTime() + 600000);
+
+	public int getIs_for_reset_password() {
+		return is_for_reset_password;
+	}
+
+	public void setIs_for_reset_password(int is_for_reset_password) {
+		this.is_for_reset_password = is_for_reset_password;
+	}
 
 	public VerifyPin() {
 		super();
@@ -35,9 +44,20 @@ public class VerifyPin {
 		this.expire_date = expire_date;
 	}
 
+	public VerifyPin(long user_id, String pin_code, int is_for_reset_password, Date expire_date) {
+		super();
+		this.user_id = user_id;
+		this.pin_code = pin_code;
+		this.is_for_reset_password = is_for_reset_password;
+		this.expire_date = expire_date;
+	}
+
 	@Override
 	public String toString() {
-		return "VerifyPin [user_id=" + user_id + ", pin_code=" + pin_code + ", expire_date=" + expire_date + "]";
+		return "VerifyPin [user_id=" + user_id + ", pin_code=" + pin_code + ", is_for_reset_password="
+				+ is_for_reset_password + ", expire_date=" + expire_date + "]";
 	}
+	
+	
 
 }

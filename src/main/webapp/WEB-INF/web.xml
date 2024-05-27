@@ -121,4 +121,34 @@
     <servlet-name>ResentCodeServlet</servlet-name>
     <url-pattern>/ResentCodeServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>SentForgotPassword</display-name>
+    <servlet-name>SentForgotPassword</servlet-name>
+    <servlet-class>servlets.SentForgotPassword</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SentForgotPassword</servlet-name>
+    <url-pattern>/SentForgotPassword</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ForgotePasswordSentCodeServlet</display-name>
+    <servlet-name>ForgotePasswordSentCodeServlet</servlet-name>
+    <servlet-class>servlets.ForgotePasswordSentCodeServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ForgotePasswordSentCodeServlet</servlet-name>
+    <url-pattern>/ForgotePasswordSentCodeServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ForgotePasswordCheckCodeServlet</display-name>
+    <servlet-name>ForgotePasswordCheckCodeServlet</servlet-name>
+    <servlet-class>servlets.ForgotePasswordCheckCodeServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ForgotePasswordCheckCodeServlet</servlet-name>
+    <url-pattern>/ForgotePasswordCheckCodeServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

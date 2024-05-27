@@ -37,11 +37,16 @@ color:red;
 				type='password' required />
 		</div>
 		<div style="text-align:center">
-			<input
-				type='submit' value='login' />
-		<p><a href="register.jsp">Don't have an account?</a></p>
-		<p>-OR-</p>
-		<p onclick="alert('Under Development!')"><a href="#">Login as guest!</a></p>
+			<input type='submit' value='login' />
+			<p>
+				<a href="register.jsp">Don't have an account?</a>
+			</p>
+			<p>-OR-</p>
+			<p>
+				<a href="reset_password.jsp">Forgot Password?</a>
+			</p>
+			<p>-OR-</p>
+			<p onclick="alert('Under Development!')"><a href="#">Login as guest!</a></p>
 		</div>
 	</form>
 </body>

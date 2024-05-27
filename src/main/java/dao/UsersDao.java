@@ -213,5 +213,22 @@ public class UsersDao {
 		}
 		return f;
 	}
+	public Users getUserByEmail(String email) {
+		Users u=new Users();
+		String query = "select user_id, user_email, user_is_approved from users where user_email=?";
+		try {
+			PreparedStatement pst = con.prepareStatement(query);
+			pst.setString(1, email);
+			ResultSet res = pst.executeQuery();
+			while (res.next()) {
+				u.setUser_email(res.getString("user_email"));
+				u.setUser_is_approved(res.getInt("user_is_approved"));
+				u.setUser_id(res.getLong("user_id"));
+			}
+		} catch (SQLException e) {
+			System.out.println(e + " UsersDao ; method getUserByEmail; line 227");
+		}
+		return u;
+	}
 
 }
