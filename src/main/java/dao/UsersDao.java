@@ -230,5 +230,19 @@ public class UsersDao {
 		}
 		return u;
 	}
+	
+	public int editPassword(long id, String password) {
+		int f = 0;
+		String query="update users set user_password=? where user_id=?";
+		try {
+			PreparedStatement pst = con.prepareStatement(query);
+			pst.setLong(2, id);
+			pst.setString(1, password);
+			f = pst.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println(e + " UsersDao ; method editPassword; line 243");
+		}
+		return f;
+	}
 
 }

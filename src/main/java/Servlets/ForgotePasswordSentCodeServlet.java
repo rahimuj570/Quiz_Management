@@ -66,6 +66,9 @@ public class ForgotePasswordSentCodeServlet extends HttpServlet {
 				if(f) {
 					sc.setAttribute("sent_forgot_pass", "Check Your Email!");
 					response.sendRedirect("reset_password.jsp");
+				}else {
+					sc.setAttribute("something_wrong", "Something Went Wrong!");
+					response.sendRedirect("reset_password.jsp");
 				}
 			}else {
 				if(vpin.getIs_for_reset_password()==1 && !vpin.getExpire_date().before(new Date())) {
@@ -74,8 +77,6 @@ public class ForgotePasswordSentCodeServlet extends HttpServlet {
 				}
 				else{
 					if(vpin.getIs_for_reset_password()==1 && vpin.getExpire_date().before(new Date())){
-						//sc.setAttribute("expire_forgot_pass", "Your Pin Is Expired!");
-						//response.sendRedirect("reset_password.jsp");
 						pinsDao.deleteVerifyCode(vpin.getUser_id(), 1);
 					}
 					//sent pin
@@ -91,6 +92,8 @@ public class ForgotePasswordSentCodeServlet extends HttpServlet {
 						sc.setAttribute("sent_forgot_pass", "Check Your Email!");
 						response.sendRedirect("reset_password.jsp");
 					}
+					sc.setAttribute("something_wrong", "Something Went Wrong!");
+					response.sendRedirect("reset_password.jsp");
 				}
 			}
 			System.out.println(vpin);
