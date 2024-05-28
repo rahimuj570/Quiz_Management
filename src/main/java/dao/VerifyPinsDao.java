@@ -36,7 +36,7 @@ public class VerifyPinsDao {
 	}
 
 	public VerifyPin getVerifyCode(long user_id) {
-		String query = "select * from verify_pins where user_id=" + user_id;
+		String query = "select * from verify_pins where user_id=" + user_id+" and is_for_reset_password=0";
 		VerifyPin pin = null;
 		try {
 			PreparedStatement pst = con.prepareStatement(query);

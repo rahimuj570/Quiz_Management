@@ -49,7 +49,7 @@ public class ResentCodeServlet extends HttpServlet {
 			if (email != null) {
 				VerifyPinsDao dao = new VerifyPinsDao(ConnectionProvider.main());
 				VerifyPin vpin = dao.getVerifyCode((long) sc.getAttribute("verify_user_id"));
-				if ((vpin.getPin_code() == null || vpin.getExpire_date().before(new Date()))&&vpin.getIs_for_reset_password()==0) {
+				if ((vpin.getPin_code() == null || vpin.getExpire_date().before(new Date()))) {
 					VerifyPin verify_pin = new VerifyPin();
 					verify_pin.setPin_code(GeneratePinCode.getCode());
 					verify_pin.setUser_id((long) sc.getAttribute("verify_user_id"));

@@ -51,7 +51,7 @@ public class ForgotePasswordSentCodeServlet extends HttpServlet {
 			response.sendRedirect("reset_password.jsp");
 		}else {
 			VerifyPinsDao pinDao = new VerifyPinsDao(ConnectionProvider.main());
-			VerifyPin vpin = pinDao.getVerifyCode(u.getUser_id());
+			VerifyPin vpin = pinDao.getVerifyCode(u.getUser_id(),1);
 			
 			if(vpin.getPin_code()==null) {
 				//sent pin
@@ -71,12 +71,12 @@ public class ForgotePasswordSentCodeServlet extends HttpServlet {
 					response.sendRedirect("reset_password.jsp");
 				}
 			}else {
-				if(vpin.getIs_for_reset_password()==1 && !vpin.getExpire_date().before(new Date())) {
+				if(!vpin.getExpire_date().before(new Date())) {
 					sc.setAttribute("already_sent_forgot_pass", "Already Sent Your PIN!");
 					response.sendRedirect("reset_password.jsp");
 				}
 				else{
-					if(vpin.getIs_for_reset_password()==1 && vpin.getExpire_date().before(new Date())){
+					if(vpin.getExpire_date().before(new Date())){
 						pinsDao.deleteVerifyCode(vpin.getUser_id(), 1);
 					}
 					//sent pin
