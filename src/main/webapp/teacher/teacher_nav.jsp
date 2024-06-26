@@ -4,9 +4,10 @@
 	<ul class="nav_ul">
 		<li><a href="#">LOGO</a></li>
 		<li><a href="<%=request.getContextPath()%>/admin/dashboard.jsp">Home</a></li>
-		<li><a href="pending_users.jsp">Create Question</a></li>
-		<li><a href="show_teachers.jsp">Show Teachers</a></li>
-		<li><a href="show_students.jsp">Show Student</a></li>
+		<li><a href="create_question.jsp">Create Question</a></li>
+		<li><a href="show_question_set.jsp">Question Sets</a></li>
+		<li><a href="show_questions.jsp">Show Questions</a></li>
+		<li><a href="create_exam.jsp">Create Exam</a></li>
 		<%
 		Users me = (Users)session.getAttribute("current_user");
 		if (me.getUser_is_admin() == 1) {
