@@ -260,4 +260,14 @@
     <servlet-name>EditExamServlet</servlet-name>
     <url-pattern>/EditExamServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>DeleteExamServlet</display-name>
+    <servlet-name>DeleteExamServlet</servlet-name>
+    <servlet-class>servlets.DeleteExamServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DeleteExamServlet</servlet-name>
+    <url-pattern>/DeleteExamServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

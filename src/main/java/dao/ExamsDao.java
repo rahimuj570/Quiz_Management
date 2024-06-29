@@ -40,6 +40,7 @@ public class ExamsDao {
 			pst.setTimestamp(10, new Timestamp(e.getExam_start().getTime()));
 			pst.setTimestamp(11, new Timestamp(e.getExam_end().getTime()));
 			pst.setInt(12, e.getExam_isOver());
+			pst.setInt(13, e.getExam_isApproved());
 			f = pst.executeUpdate();
 
 			QuestionSetsDao qsDao = new QuestionSetsDao(ConnectionProvider.main());
@@ -69,7 +70,7 @@ public class ExamsDao {
 				con.close();
 			}
 		} catch (SQLException e1) {
-			System.out.println(e + " ExamsDao; method CreateExam; line 70");
+			System.out.println(e1 + " ExamsDao; method CreateExam; line 70");
 		}
 		return f;
 	}
@@ -178,7 +179,7 @@ public class ExamsDao {
 				return 0;
 			} else {
 				pst.close();
-				f = deleteExams_QuestionSet_relation(e.getExam_id());
+				f = deleteExams_QuestionSet_relation(e.getExam_id(), pst);
 				pst.close();
 				if(f==0) {
 					con.rollback();
@@ -208,15 +209,54 @@ public class ExamsDao {
 		return f;
 	}
 
-	private int deleteExams_QuestionSet_relation(int exam_id) {
+	private int deleteExams_QuestionSet_relation(int exam_id, PreparedStatement pst) {
 		int f = 0;
 		String query = "delete from exam_to_question_set_relation where exam_id="+exam_id;
 		try {
-			PreparedStatement pst = con.prepareStatement(query);
+			con.setAutoCommit(false);
+			pst = con.prepareStatement(query);
 			f = pst.executeUpdate();
 		} catch (SQLException e) {
+			f = 0;
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		return f;
+	}
+	
+	public int deleteExam(int exam_id) {
+		int f = 0;
+		try {
+			con.setAutoCommit(false);
+			PreparedStatement pst = null;
+			f = deleteExams_QuestionSet_relation(exam_id, pst);
+			if(f==0) {
+				pst.close();
+				con.rollback();
+				return f;
+			}else {
+				pst.close();
+				String query = "delete from exams where exam_id="+exam_id;
+				pst = con.prepareStatement(query);
+				f = pst.executeUpdate();
+				if(f==0) {
+					pst.close();
+					con.rollback();
+					return f;
+				}
+				pst.close();
+				con.commit();
+			}
+		} catch (SQLException e) {
+			f=0;
+			try {
+				con.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			System.out.println(e+" ExamsDao; deleteExam method; line 257");
+
 		}
 		return f;
 	}

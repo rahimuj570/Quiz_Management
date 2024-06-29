@@ -91,7 +91,7 @@ public class CreateExamServlet extends HttpServlet {
 				response.sendRedirect(request.getContextPath()+"/teacher/create_exam.jsp");
 			}else {
 				sc.setAttribute("create_exam_OK", "Successfully Exam Created!");				
-				response.sendRedirect(request.getContextPath()+"/teacher/show_exam.jsp");
+				response.sendRedirect(request.getContextPath()+"/teacher/show_exams.jsp");
 			}
 
 		}

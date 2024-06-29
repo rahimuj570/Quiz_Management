@@ -82,14 +82,22 @@ public class EditExamServlet extends HttpServlet {
 			exm.setExam_id(Integer.parseInt(request.getParameter("exam_id")));
 
 			ExamsDao eDao = new ExamsDao(ConnectionProvider.main());
-			int f = eDao.updateExam(exm, question_sets);
-			if (f == 0) {
-				sc.setAttribute("update_exam_BAD", "Something Went Wrong!");
-				response.sendRedirect(request.getHeader("referer"));
-			} else {
-				sc.setAttribute("update_exam_OK", "Successfully Exam Updated!");
+			Exams e = eDao.getExamById(request.getParameter("exam_id"));
+			int f=0;
+			if(e.getExam_start().before(new Date(new Date().getTime()+10*60000))) {
+				sc.setAttribute("update_exam_401", "Can't Modify Exam Now, Please Contact with Admin!");
 				response.sendRedirect(request.getContextPath() + "/teacher/show_exams.jsp");
+			}else {				
+				f = eDao.updateExam(exm, question_sets);
+				if (f == 0) {
+					sc.setAttribute("update_exam_BAD", "Something Went Wrong!");
+					response.sendRedirect(request.getHeader("referer"));
+				} else {
+					sc.setAttribute("update_exam_OK", "Successfully Exam Updated!");
+					response.sendRedirect(request.getContextPath() + "/teacher/show_exams.jsp");
+				}
 			}
+			
 		}
 	}
 

@@ -36,82 +36,45 @@ BatchSectionDao bsDao = new BatchSectionDao(ConnectionProvider.main());
 %>
 
 <body>
-
-	<%
-	if (session.getAttribute("create_exam_OK") != null) {
-	%>
-	<p class="center_txt success_txt"><%=session.getAttribute("create_exam_OK")%></p>
-	<%
-	session.removeAttribute("create_exam_OK");
-	}
-	%>
-	<%
-	if (session.getAttribute("update_exam_OK") != null) {
-	%>
-	<p class="center_txt success_txt"><%=session.getAttribute("update_exam_OK")%></p>
-	<%
-	session.removeAttribute("update_exam_OK");
-	}
-	%>
-	<%
-	if (session.getAttribute("qs_delete_OK") != null) {
-	%>
-	<p class="center_txt success_txt"><%=session.getAttribute("qs_delete_OK")%></p>
-	<%
-	session.removeAttribute("qs_delete_OK");
-	}
-	%>
-
-	<form
-		style="margin: 20px 0px; border: 3px solid lime; padding: 10px 0px"
-		action="<%=request.getContextPath()%>/CreateQuestionSetServlet"
-		method="post">
-		<label for="qs_name">Set Name</label> <input id="qs_name"
-			name="qs_name" type="text" /> <label for="id">Course</label><select
-			name="course" id="course">
-			<%
-			for (Course c : courseList) {
-			%>
-			<option value="<%=c.getCourse_id()%>"><%=c.getCourse_name()%></option>
-			<%
-			}
-			%>
-		</select> <label for="id">Batch</label><select name="batch" id="batch">
-			<%
-			for (BatchClass bc : classList) {
-			%>
-			<option value="<%=bc.getId()%>"><%=bc.getBatchClass()%></option>
-			<%
-			}
-			%>
-		</select> <label for="id">Section</label><select name="section" id="section">
-			<%
-			for (Sections s : sectiponList) {
-			%>
-			<option value="<%=s.getId()%>"><%=s.getSection()%></option>
-			<%
-			}
-			%>
-		</select>
-		<button style="margin-left: 10px; background: cyan">Create
+	<div
+		style="text-align:center; margin: 20px 0px; border: 3px solid lime; padding: 10px 0px">
+		<button onclick="location='create_exam.jsp'" style="margin-left: 10px; background: lime">Create
 			Question Set</button>
+
 		<%
-		if (session.getAttribute("qs_create_success") != null) {
+		if (session.getAttribute("create_exam_OK") != null) {
 		%>
-		<span class="success_txt"><%=session.getAttribute("qs_create_success")%></span>
+		<span class="center_txt success_txt"><%=session.getAttribute("create_exam_OK")%></span>
 		<%
-		session.removeAttribute("qs_create_success");
+		session.removeAttribute("create_exam_OK");
 		}
 		%>
 		<%
-		if (session.getAttribute("qs_create_fail") != null) {
+		if (session.getAttribute("update_exam_OK") != null) {
 		%>
-		<span class="success_txt"><%=session.getAttribute("qs_create_fail")%></span>
+		<span class="center_txt success_txt"><%=session.getAttribute("update_exam_OK")%></span>
 		<%
-		session.removeAttribute("qs_create_fail");
+		session.removeAttribute("update_exam_OK");
 		}
 		%>
-	</form>
+		<%
+		if (session.getAttribute("update_exam_401") != null) {
+		%>
+		<span class="center_txt danger_txt"><%=session.getAttribute("update_exam_401")%></span>
+		<%
+		session.removeAttribute("update_exam_401");
+		}
+		%>
+		<%
+		if (session.getAttribute("delete_exam_OK") != null) {
+		%>
+		<span class="center_txt success_txt"><%=session.getAttribute("delete_exam_OK")%></span>
+		<%
+		session.removeAttribute("delete_exam_OK");
+		}
+		%>
+
+	</div>
 	<div style="overflow-x: auto;">
 		<table>
 			<tr>
@@ -140,10 +103,10 @@ BatchSectionDao bsDao = new BatchSectionDao(ConnectionProvider.main());
 				<td><%=e.getExam_question_amount()%>
 				<td><%=e.getExam_marks()%>
 				<td><%=e.getExam_start()%>
-				<td><%=e.getExam_privacy()==0?"Public":"Protected"%></td>
-				<td><%=e.getExam_isApproved()==1?"YES":"NO"%></td>
+				<td><%=e.getExam_privacy() == 0 ? "Public" : "Protected"%></td>
+				<td><%=e.getExam_isApproved() == 1 ? "YES" : "NO"%></td>
 				<td>
-					<button style="background: #ffc6c6">
+					<button style="background: cyan">
 						<a
 							href="<%=request.getContextPath()%>/teacher/edit_exam.jsp?exam_id=<%=e.getExam_id()%>">Edit</a>
 					</button>
@@ -151,7 +114,7 @@ BatchSectionDao bsDao = new BatchSectionDao(ConnectionProvider.main());
 				<td>
 					<button style="background: #ffc6c6">
 						<a
-							href="<%=request.getContextPath()%>">Delete</a>
+							href="<%=request.getContextPath()%>/DeleteExamServlet?exam_id=<%=e.getExam_id()%>">Delete</a>
 					</button>
 				</td>
 			</tr>
