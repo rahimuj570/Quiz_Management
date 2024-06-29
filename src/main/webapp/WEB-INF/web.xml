@@ -240,4 +240,24 @@
     <servlet-name>DeleteQuestionSetServlet</servlet-name>
     <url-pattern>/DeleteQuestionSetServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>CreateExamServlet</display-name>
+    <servlet-name>CreateExamServlet</servlet-name>
+    <servlet-class>servlets.CreateExamServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CreateExamServlet</servlet-name>
+    <url-pattern>/CreateExamServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>EditExamServlet</display-name>
+    <servlet-name>EditExamServlet</servlet-name>
+    <servlet-class>servlets.EditExamServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>EditExamServlet</servlet-name>
+    <url-pattern>/EditExamServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

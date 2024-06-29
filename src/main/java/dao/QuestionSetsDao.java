@@ -18,7 +18,29 @@ public class QuestionSetsDao {
 
 	public ArrayList<QuestionSets> getAllQuestionSet(Long uid) {
 		ArrayList<QuestionSets> setList = new ArrayList<QuestionSets>();
-		String query = "select * from question_sets where qs_teacher=" + uid;
+		String query = "select * from question_sets where qs_teacher=" + uid+" order by qs_id desc";
+		try {
+			PreparedStatement pst = con.prepareStatement(query);
+			ResultSet res = pst.executeQuery();
+			while (res.next()) {
+				QuestionSets qs = new QuestionSets();
+				qs.setQs_batch(res.getInt("qs_batch"));
+				qs.setQs_course(res.getInt("qs_course"));
+				qs.setQs_created(res.getTimestamp("qs_created"));
+				qs.setQs_id(res.getInt("qs_id"));
+				qs.setQs_name(res.getString("qs_name"));
+				qs.setQs_teacher(res.getLong("qs_teacher"));
+				qs.setQs_section(res.getInt("qs_section"));
+				setList.add(qs);
+			}
+		} catch (SQLException e) {
+			System.out.println(e + " in QuestionSetsDao; gellAllQSet methon; line 36");
+		}
+		return setList;
+	}
+	public ArrayList<QuestionSets> getAllQuestionSet(Long uid, String courseId, String batchhId) {
+		ArrayList<QuestionSets> setList = new ArrayList<QuestionSets>();
+		String query = "select * from question_sets where qs_teacher=" + uid+" and qs_course="+courseId+" and qs_batch="+batchhId+" order by qs_id desc";
 		try {
 			PreparedStatement pst = con.prepareStatement(query);
 			ResultSet res = pst.executeQuery();
@@ -58,6 +80,20 @@ public class QuestionSetsDao {
 			System.out.println(e + " in QuestionSetsDao; gellQSet methon; line 58");
 		}
 		return qs;
+	}
+	public Long getTeacherOfQuestionSetId(String qs_id) {
+		Long teacherId = null;
+		String query = "select qs_teacher from question_sets where qs_id=" + qs_id;
+		try {
+			PreparedStatement pst = con.prepareStatement(query);
+			ResultSet res = pst.executeQuery();
+			if (res.next()) {
+				teacherId=res.getLong(1);
+			}
+		} catch (SQLException e) {
+			System.out.println(e + " in QuestionSetsDao; gellTeacherIDQSet method; line 94");
+		}
+		return teacherId;
 	}
 
 	public int getTotalQuestionAmount(int id) {

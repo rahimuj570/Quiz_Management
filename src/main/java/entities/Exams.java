@@ -15,6 +15,25 @@ public class Exams {
 	int exam_marks;
 	Date exam_start;
 	Date exam_end;
+	int exam_isOver;
+	int exam_isApproved;
+
+	
+	public int getExam_isApproved() {
+		return exam_isApproved;
+	}
+
+	public void setExam_isApproved(int exam_isApproved) {
+		this.exam_isApproved = exam_isApproved;
+	}
+
+	public int getExam_isOver() {
+		return exam_isOver;
+	}
+
+	public void setExam_isOver(int exam_isOver) {
+		this.exam_isOver = exam_isOver;
+	}
 
 	public Long getExam_teacher() {
 		return exam_teacher;
@@ -115,6 +134,15 @@ public class Exams {
 	public Exams() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public String toString() {
+		return "Exams [exam_id=" + exam_id + ", exam_name=" + exam_name + ", exam_teacher=" + exam_teacher
+				+ ", exam_batch=" + exam_batch + ", exam_section=" + exam_section + ", exam_course=" + exam_course
+				+ ", exam_privacy=" + exam_privacy + ", exam_duration=" + exam_duration + ", exam_question_amount="
+				+ exam_question_amount + ", exam_marks=" + exam_marks + ", exam_start=" + exam_start + ", exam_end="
+				+ exam_end + ", exam_isOver=" + exam_isOver + "]";
 	}
 
 }

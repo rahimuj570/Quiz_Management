@@ -8,6 +8,7 @@
 		<li><a href="show_question_set.jsp">Question Sets</a></li>
 		<li><a href="show_questions.jsp">Show Questions</a></li>
 		<li><a href="create_exam.jsp">Create Exam</a></li>
+		<li><a href="show_exams.jsp">Show Exam</a></li>
 		<%
 		Users me = (Users)session.getAttribute("current_user");
 		if (me.getUser_is_admin() == 1) {
