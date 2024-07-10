@@ -1,3 +1,4 @@
+<%@page import="java.util.Date"%>
 <%@page import="entities.Exams"%>
 <%@page import="dao.ExamsDao"%>
 <%@page import="entities.QuestionSets"%>
@@ -66,6 +67,8 @@ td {
 <link rel="stylesheet" type="text/css" href="./teacher.css">
 </head>
 <body>
+
+
 	<%
 	BatchSectionDao bs = new BatchSectionDao(ConnectionProvider.main());
 	QuestionSetsDao qs = new QuestionSetsDao(ConnectionProvider.main());
@@ -76,6 +79,10 @@ td {
 	ArrayList<BatchClass> classList = bs.getAllClass();
 	ArrayList<Course> courseList = bs.getAllCourse();
 	ArrayList<QuestionSets> qsList = qs.getAllQuestionSet(cu.getUser_id());
+	
+if(e.getExam_start().before(new Date(new Date().getTime()+10*60000))) {
+	session.setAttribute("update_exam_401", "Can't Modify Exam Now, Please Contact with Admin!");
+	response.sendRedirect(request.getContextPath() + "/teacher/show_exams.jsp");}
 
 	/////////////////
 	if (e.getExam_teacher().equals(cu.getUser_id())) {
@@ -282,7 +289,6 @@ td {
 	let minutes = currentDate.getMinutes();
 	let meridiem = hours >= 12 ? 'PM' : 'AM';
 
-	document.getElementById('exam_time').min = d.getHours() + ':'
-			+ d.getMinutes();
+	//document.getElementById('exam_time').min = d.getHours() + ':'	+ d.getMinutes();
 </script>
 </html>

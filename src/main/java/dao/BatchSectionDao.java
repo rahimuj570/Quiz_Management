@@ -10,6 +10,7 @@ import java.util.List;
 import entities.BatchClass;
 import entities.Course;
 import entities.Sections;
+import helper.GetBatchSectionOfStudentPOJO;
 
 public class BatchSectionDao {
 	Connection con;
@@ -110,5 +111,22 @@ public class BatchSectionDao {
 			e.printStackTrace();
 		}
 		return sec_name;
+	}
+	
+	public GetBatchSectionOfStudentPOJO getBatchSectionOfStudent(Long student_id) {
+		GetBatchSectionOfStudentPOJO bss = new GetBatchSectionOfStudentPOJO();
+		String query="select * from batch_section_user_relation where user_id="+student_id;
+		try {
+			PreparedStatement pst = con.prepareStatement(query);
+			ResultSet res = pst.executeQuery();
+			if(res.next()) {
+				bss.setBatchId(res.getInt(2));
+				bss.setSectionId(res.getInt(3));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return bss;
 	}
 }

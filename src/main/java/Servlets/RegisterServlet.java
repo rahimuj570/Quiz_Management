@@ -18,6 +18,7 @@ import entities.VerifyPin;
 import helper.ConnectionProvider;
 import helper.GEmailSender;
 import helper.GeneratePinCode;
+import helper.GetBatchSectionOfStudentPOJO;
 
 /**
  * Servlet implementation class RegisterServlet
@@ -50,8 +51,11 @@ public class RegisterServlet extends HttpServlet {
 		u.setUser_is_teacher(Integer.parseInt(request.getParameter("role")));
 		u.setUser_section(request.getParameter("section"));
 		u.setUser_batch(request.getParameter("batch"));
-
+		GetBatchSectionOfStudentPOJO bs = new GetBatchSectionOfStudentPOJO();
+		bs.setBatchId(Integer.parseInt(request.getParameter("batch")));
+		bs.setSectionId(Integer.parseInt(request.getParameter("section")));
 		System.out.println(u);
+		
 		
 		VerifyPin verify_pin = new VerifyPin();
 		verify_pin.setPin_code(GeneratePinCode.getCode());
@@ -61,10 +65,12 @@ public class RegisterServlet extends HttpServlet {
 		VerifyPinsDao pinsDao = new VerifyPinsDao(ConnectionProvider.main());
 		//pinsDao.saveVerifyCode(verify_pin);
 		
-		/*
-		 * UsersDao dao = new UsersDao(ConnectionProvider.main()); int f =
-		 * dao.saveUser(u); PrintWriter out = response.getWriter(); out.print(f);
-		 */
+
+		 UsersDao dao = new UsersDao(ConnectionProvider.main());
+		 int f = dao.saveUser(u, bs); 
+		 PrintWriter out = response.getWriter();
+		 System.out.println(f);
+		 out.print(f);
 	}
 
 	/**

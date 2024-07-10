@@ -15,8 +15,8 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Show Exam</title>
-<link rel="stylesheet" type="text/css" href="teacher.css">
+<title>Pending Exams</title>
+<link rel="stylesheet" type="text/css" href="admin.css">
 <style type="text/css">
 label {
 	padding: 0 10px 0 18px;
@@ -26,28 +26,22 @@ label {
 
 <%
 BatchSectionDao bs = new BatchSectionDao(ConnectionProvider.main());
-ArrayList<Sections> sectiponList = bs.getAllSection();
-ArrayList<BatchClass> classList = bs.getAllClass();
-ArrayList<Course> courseList = bs.getAllCourse();
-
 ExamsDao eDao = new ExamsDao(ConnectionProvider.main());
 Users cu = (Users) session.getAttribute("current_user");
-ArrayList<Exams> examList = eDao.getAllExamById(cu.getUser_id());
+ArrayList<Exams> examList = eDao.getPendingExam();
 BatchSectionDao bsDao = new BatchSectionDao(ConnectionProvider.main());
 %>
 
 <body>
 	<div
-		style="text-align:center; margin: 20px 0px; border: 3px solid lime; padding: 10px 0px">
-		<button onclick="location='create_exam.jsp'" style="margin-left: 10px; background: lime">Create
-			Question Set</button>
+		style="text-align: center; margin: 20px 0px; border: 3px solid lime; padding: 10px 0px">
 
 		<%
-		if (session.getAttribute("create_exam_OK") != null) {
+		if (session.getAttribute("permission_OK") != null) {
 		%>
-		<span class="center_txt success_txt"><%=session.getAttribute("create_exam_OK")%></span>
+		<span class="center_txt success_txt"><%=session.getAttribute("permission_OK")%></span>
 		<%
-		session.removeAttribute("create_exam_OK");
+		session.removeAttribute("permission_OK");
 		}
 		%>
 		<%
@@ -90,10 +84,7 @@ BatchSectionDao bsDao = new BatchSectionDao(ConnectionProvider.main());
 				<th>Exam Start</th>
 				<th>Exam Duration</th>
 				<th>Exam Over</th>
-				<th>Privacy</th>
-				<th>Approved by Admin</th>
-				<th>Edit</th>
-				<th>Delete</th>
+				<th>Approved</th>
 			</tr>
 			<%
 			for (Exams e : examList) {
@@ -108,25 +99,21 @@ BatchSectionDao bsDao = new BatchSectionDao(ConnectionProvider.main());
 				<td><%=e.getExam_marks()%>
 				<td><%=e.getExam_start()%>
 				<td><%=e.getExam_duration()%>
-				<td><%
-				if(e.getExam_end().before(new Date(new Date().getTime())))
-					out.print("Yes");
-				else out.print("No");
-%>
-				<td><%=e.getExam_privacy() == 0 ? "Public" : "Protected"%></td>
-				<td><%=e.getExam_isApproved() == 1 ? "YES" : "NO"%></td>
+				<td>
+					<%
+					if (e.getExam_end().before(new Date(new Date().getTime())))
+						out.print("Yes");
+					else
+						out.print("No");
+					%>
+				
 				<td>
 					<button style="background: cyan">
 						<a
-							href="<%=request.getContextPath()%>/teacher/edit_exam.jsp?exam_id=<%=e.getExam_id()%>">Edit</a>
+							href="<%=request.getContextPath()%>/admin/select_students.jsp?exam_id=<%=e.getExam_id()%>">Approved</a>
 					</button>
 				</td>
-				<td>
-					<button style="background: #ffc6c6">
-						<a
-							href="<%=request.getContextPath()%>/DeleteExamServlet?exam_id=<%=e.getExam_id()%>">Delete</a>
-					</button>
-				</td>
+
 			</tr>
 			<%
 			}

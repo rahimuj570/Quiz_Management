@@ -1,3 +1,7 @@
+<%@page import="entities.Sections"%>
+<%@page import="entities.BatchClass"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="dao.BatchSectionDao"%>
 <%@page import="helper.ConnectionProvider"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
@@ -22,40 +26,144 @@ keyframes spiner-1 { 0%{
 }
 
 25
+
+
+
+
 %
 {
 transform
+
+
+
+
 :
-rotate(
+
+
+
+
+rotate
+
+
+(
+
+
+
+
 90deg
-);
+
+
+
+
+)
+
+
+;
 }
 50
+
+
+
+
 %
 {
 transform
+
+
+
+
 :
-rotate(
+
+
+
+
+rotate
+
+
+(
+
+
+
+
 180deg
-);
+
+
+
+
+)
+
+
+;
 }
 75
+
+
+
+
 %
 {
 transform
+
+
+
+
 :
-rotate(
+
+
+
+
+rotate
+
+
+(
+
+
+
+
 270deg
-);
+
+
+
+
+)
+
+
+;
 }
 100
+
+
+
+
 %
 {
 transform
+
+
+
+
 :
-rotate(
+
+
+
+
+rotate
+
+
+(
+
+
+
+
 260deg
-);
+
+
+
+
+)
+
+
+;
 }
 }
 #spiner {
@@ -94,24 +202,40 @@ rotate(
 		</div>
 
 		<!-- ONLY FOR STUDENTS -->
-		<div id="onlyForStudent">
-		
-		<div>
-			<label for="id">Batch/Class</label><br /> <select name="batch" id="batch">
-				<option value="volvo">Volvo</option>
-				<option value="saab">Saab</option>
-				<option value="vw">VW</option>
-				<option value="audi" selected>Audi</option>
-			</select>
-		</div>
-		<div >
-			<label for="id">Section</label><br /> <select name="section" id="section">
-				<option value="volvo">Volvo</option>
-				<option value="saab">Saab</option>
-				<option value="vw">VW</option>
-				<option value="audi" selected>Audi</option>
-			</select>
-		</div>
+
+		<%
+		BatchSectionDao bsDao = new BatchSectionDao(ConnectionProvider.main());
+		ArrayList<BatchClass> batchList = bsDao.getAllClass();
+		ArrayList<Sections> sectionList = bsDao.getAllSection();
+		%>
+
+
+		<div style="display:flex; gap:20px" id="onlyForStudent">
+
+			<div>
+				<label for="id">Batch/Class</label><br /> <select name="batch"
+					id="batch">
+					<%
+					for (BatchClass btch : batchList) {
+					%>
+					<option value="<%=btch.getId()%>"><%=bsDao.getBatchNameById(btch.getId())%></option>
+					<%
+					}
+					%>
+				</select>
+			</div>
+			<div>
+				<label for="id">Section</label><br /> <select name="section"
+					id="section">
+					<%
+					for (Sections sec : sectionList) {
+					%>
+					<option value="<%=sec.getId()%>"><%=bsDao.getSectionNameById(sec.getId()).equals("ALL")?"N/A":bsDao.getSectionNameById(sec.getId())%></option>
+					<%
+					}
+					%>
+				</select>
+			</div>
 		</div>
 		<!-- ONLY FOR STUDENTS -->
 
@@ -132,7 +256,7 @@ rotate(
 </body>
 <script>
 document.getElementById('roles').addEventListener('click',(e)=>{
-	if(document.getElementById('roles').firstElementChild.checked===true)document.getElementById('onlyForStudent').style.display='block';
+	if(document.getElementById('roles').firstElementChild.checked===true)document.getElementById('onlyForStudent').style.display='flex';
 	else document.getElementById('onlyForStudent').style.display='none';
 	
 })
@@ -155,7 +279,7 @@ document.getElementById("register_form").addEventListener("submit",(e)=>{
 		if(this.readyState===4){
 			spiner.style.display='none';
 			if(this.status===200){
-				if(this.responseText==0){
+				if(this.responseText==1){
 					alert('Successfully Registered!')
 					window.location='login.jsp'
 				}else if(this.responseText==1062){

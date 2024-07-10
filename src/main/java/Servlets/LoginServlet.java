@@ -60,7 +60,7 @@ public class LoginServlet extends HttpServlet {
 			} else if (u.getUser_is_admin() == 1) {
 				response.sendRedirect(request.getContextPath() + "/admin/dashboard.jsp");
 			} else {
-				response.getWriter().append("dashboard");
+				response.sendRedirect(request.getContextPath() + "/student/dashboard.jsp");
 			}
 		}
 

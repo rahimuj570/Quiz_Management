@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import entities.Users;
+import helper.GetBatchSectionOfStudentPOJO;
 
 public class UsersDao {
 	Connection con;
@@ -16,10 +17,11 @@ public class UsersDao {
 		this.con = con;
 	}
 
-	public int saveUser(Users u) {
-		int f = 0;
-		String query = "insert into users (user_id,user_first_name,user_last_name,user_email,user_password,user_is_teacher,user_is_admin,user_is_approved) value(?,?,?,?,?,?,?,?)";
+	public int saveUser(Users u, GetBatchSectionOfStudentPOJO bs) {
+		int f = -1;
 		try {
+			con.setAutoCommit(false);
+			String query = "insert into users (user_id,user_first_name,user_last_name,user_email,user_password,user_is_teacher,user_is_admin,user_is_approved) value(?,?,?,?,?,?,?,?)";
 			PreparedStatement pst = con.prepareStatement(query);
 			pst.setLong(1, u.getUser_id());
 			pst.setString(2, u.getUser_first_name());
@@ -29,13 +31,43 @@ public class UsersDao {
 			pst.setInt(6, u.getUser_is_teacher());
 			pst.setInt(7, u.getUser_is_admin());
 			pst.setInt(8, u.getUser_is_approved());
-			pst.executeUpdate();
+			f = pst.executeUpdate();
+			if (f == 0) {
+				pst.close();
+				con.rollback();
+				return -1;
+			} else {
+				pst.close();
+				if(u.getUser_is_teacher()==0) {					
+					query = "insert into batch_section_user_relation values(?,?,?)";
+					pst = con.prepareStatement(query);
+					pst.setLong(1, u.getUser_id());
+					pst.setInt(2, bs.getBatchId());
+					pst.setInt(3, bs.getSectionId());
+					f = pst.executeUpdate();
+					if (f == 0) {
+						pst.close();
+						con.rollback();
+						return -1;
+					}
+				}
+			}
+			pst.close();
+			con.commit();
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			System.out.println(e + "from userDao; line 34");
 			f = e.getErrorCode();
+			try {
+				con.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+
 		return f;
 	}
 
@@ -213,8 +245,9 @@ public class UsersDao {
 		}
 		return f;
 	}
+
 	public Users getUserByEmail(String email) {
-		Users u=new Users();
+		Users u = new Users();
 		String query = "select user_id, user_email, user_is_approved from users where user_email=?";
 		try {
 			PreparedStatement pst = con.prepareStatement(query);
@@ -230,10 +263,10 @@ public class UsersDao {
 		}
 		return u;
 	}
-	
+
 	public int editPassword(long id, String password) {
 		int f = 0;
-		String query="update users set user_password=? where user_id=?";
+		String query = "update users set user_password=? where user_id=?";
 		try {
 			PreparedStatement pst = con.prepareStatement(query);
 			pst.setLong(2, id);

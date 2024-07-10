@@ -46,7 +46,7 @@ color:red;
 				<a href="reset_password.jsp">Forgot Password?</a>
 			</p>
 			<p>-OR-</p>
-			<p onclick="alert('Under Development!')"><a href="#">Login as guest!</a></p>
+			<p onclick="alert('Coming Soon!')"><a href="#">Login as guest!</a></p>
 		</div>
 	</form>
 </body>

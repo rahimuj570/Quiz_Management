@@ -11,7 +11,10 @@ import java.util.ArrayList;
 import com.mysql.cj.xdevapi.PreparableStatement;
 
 import entities.Exams;
+import entities.ExamsEvaluation;
+import entities.Options;
 import entities.QuestionSets;
+import entities.Questions;
 import helper.ConnectionProvider;
 
 public class ExamsDao {
@@ -75,9 +78,9 @@ public class ExamsDao {
 		return f;
 	}
 
-	public ArrayList<Exams> getAllExamById(Long uid) {
+	public ArrayList<Exams> getAllExamById(Long teacher_id) {
 		ArrayList<Exams> examList = new ArrayList<Exams>();
-		String query = "select * from exams where exam_teacher=" + uid + " order by exam_id desc";
+		String query = "select * from exams where exam_teacher=" + teacher_id + " order by exam_id desc";
 		try {
 			PreparedStatement pst = con.prepareStatement(query);
 			ResultSet res = pst.executeQuery();
@@ -148,8 +151,7 @@ public class ExamsDao {
 		}
 		return qs;
 	}
-	
-	
+
 	public int updateExam(Exams e, String s[]) {
 		int f = 0;
 		try {
@@ -181,11 +183,11 @@ public class ExamsDao {
 				pst.close();
 				f = deleteExams_QuestionSet_relation(e.getExam_id(), pst);
 				pst.close();
-				if(f==0) {
+				if (f == 0) {
 					con.rollback();
 					return 0;
 				}
-				
+
 				for (String qs : s) {
 					query = "insert into exam_to_question_set_relation values(?,?)";
 					pst = con.prepareStatement(query);
@@ -211,7 +213,7 @@ public class ExamsDao {
 
 	private int deleteExams_QuestionSet_relation(int exam_id, PreparedStatement pst) {
 		int f = 0;
-		String query = "delete from exam_to_question_set_relation where exam_id="+exam_id;
+		String query = "delete from exam_to_question_set_relation where exam_id=" + exam_id;
 		try {
 			con.setAutoCommit(false);
 			pst = con.prepareStatement(query);
@@ -223,23 +225,23 @@ public class ExamsDao {
 		}
 		return f;
 	}
-	
+
 	public int deleteExam(int exam_id) {
 		int f = 0;
 		try {
 			con.setAutoCommit(false);
 			PreparedStatement pst = null;
 			f = deleteExams_QuestionSet_relation(exam_id, pst);
-			if(f==0) {
+			if (f == 0) {
 				pst.close();
 				con.rollback();
 				return f;
-			}else {
+			} else {
 				pst.close();
-				String query = "delete from exams where exam_id="+exam_id;
+				String query = "delete from exams where exam_id=" + exam_id;
 				pst = con.prepareStatement(query);
 				f = pst.executeUpdate();
-				if(f==0) {
+				if (f == 0) {
 					pst.close();
 					con.rollback();
 					return f;
@@ -248,17 +250,327 @@ public class ExamsDao {
 				con.commit();
 			}
 		} catch (SQLException e) {
-			f=0;
+			f = 0;
 			try {
 				con.rollback();
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			System.out.println(e+" ExamsDao; deleteExam method; line 257");
+			System.out.println(e + " ExamsDao; deleteExam method; line 257");
 
 		}
 		return f;
+	}
+
+	public ArrayList<Exams> getAllStudentExamById(int batchId, int sectionId, String courseId) {
+		ArrayList<Exams> examList = new ArrayList<Exams>();
+		String query = "select * from exams where exam_isOver=0 and exam_batch=" + batchId + " and (exam_section="
+				+ sectionId + " or exam_section=0)";
+		if (!courseId.equals("")) {
+			query = query + " and exam_course=" + courseId;
+		}
+		query = query + " order by exam_start desc";
+		// System.out.println(query);
+		try {
+			PreparedStatement pst = con.prepareStatement(query);
+			ResultSet res = pst.executeQuery();
+			while (res.next()) {
+				Exams e = new Exams();
+				e.setExam_batch(res.getInt("exam_batch"));
+				e.setExam_course(res.getInt("exam_course"));
+				e.setExam_duration(res.getInt("exam_duration"));
+				e.setExam_end(res.getTimestamp("exam_end"));
+				e.setExam_id(res.getInt("exam_id"));
+				e.setExam_isApproved(res.getInt("exam_isApproved"));
+				e.setExam_isOver(res.getInt("exam_isOver"));
+				e.setExam_marks(res.getInt("exam_mark"));
+				e.setExam_name(res.getString("exam_name"));
+				e.setExam_privacy(res.getInt("exam_privacy"));
+				e.setExam_question_amount(res.getInt("exam_question_amount"));
+				e.setExam_section(res.getInt("exam_section"));
+				e.setExam_start(res.getTimestamp("exam_start"));
+				e.setExam_teacher(res.getLong("exam_teacher"));
+				examList.add(e);
+			}
+		} catch (SQLException e) {
+			System.out.println(e + " in ExamsDao; gellStudentAllExamById methon; line 293");
+		}
+		return examList;
+	}
+
+	public ArrayList<Questions> getAllQuestionOfExam(int exam_id, int limit) {
+		ArrayList<Questions> qList = new ArrayList<Questions>();
+		ArrayList<Integer> exam_set = getAllQuestionSetById(exam_id + "");
+		String query = "select q.q_id , q.q_statement, q.q_img, q.q_batch, q.q_subject, q.q_privacy, q.q_section, q.q_teacher, q.q_difficulty from questions q join question_set_to_question_relation qsr join exam_to_question_set_relation eqr where q.q_id=qsr.q_id and (";
+		for (int i = 0; i < exam_set.size(); i++) {
+			query = query + " qsr.qs_id=" + exam_set.get(i);
+			if (i < exam_set.size() - 1) {
+				query = query + " or ";
+			}
+		}
+		query = query + ") and eqr.qs_id=qsr.qs_id and eqr.exam_id=3 order by rand() limit " + limit;
+		// System.out.println(query);
+		try {
+			PreparedStatement pst = con.prepareStatement(query);
+			ResultSet res = pst.executeQuery();
+			while (res.next()) {
+				Questions q = new Questions();
+				q.setQ_batch(res.getInt("q_batch"));
+				q.setQ_difficulty(res.getInt("q_difficulty"));
+				q.setQ_id(res.getInt("q_id"));
+				q.setQ_img(res.getString("q_img"));
+				q.setQ_privacy(res.getInt("q_privacy"));
+				q.setQ_section(res.getInt("q_section"));
+				q.setQ_statement(res.getString("q_statement"));
+				q.setQ_subject(res.getInt("q_subject"));
+				q.setQ_teacher(res.getInt("q_teacher"));
+				qList.add(q);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return qList;
+	}
+
+	public ArrayList<Options> get4OptionByExamId(int exam_id) {
+		ArrayList<Options> optList = new ArrayList<Options>();
+		String query = "select * from ((SELECT * FROM options where opt_question=" + exam_id
+				+ " and opt_isAnswer=0 order by rand() limit 3) union all (select * from options where opt_question="
+				+ exam_id + " and opt_isAnswer=1 order by rand() limit 1)) as t order by rand()";
+		// System.out.println(query);
+		try {
+			PreparedStatement pst = con.prepareStatement(query);
+			ResultSet res = pst.executeQuery();
+			while (res.next()) {
+				Options opt = new Options();
+				opt.setIsAnswer(res.getInt("opt_isAnswer"));
+				opt.setOpt_id(res.getInt("opt_id"));
+				opt.setOpt_question(res.getInt("opt_question"));
+				opt.setOpt_text(res.getString("opt_text"));
+				optList.add(opt);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return optList;
+	}
+
+	public int createExamEvaluation(ExamsEvaluation eev) {
+		int f = 0;
+		String query = "insert into exams_evaluation values(?, ?, ?, ?, ?, ?)";
+		try {
+			PreparedStatement pst = con.prepareStatement(query);
+			pst.setLong(1, eev.getStudent_id());
+			pst.setInt(2, eev.getExam_id());
+			pst.setInt(3, eev.getCorrect_answer());
+			pst.setInt(4, eev.getWrong_answer());
+			pst.setInt(5, eev.getPass_question());
+			pst.setInt(6, eev.getIsExpelled());
+			f = pst.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return f;
+	}
+
+	public int updateExamEvaluation(ExamsEvaluation eev) {
+		int f = 0;
+		String query = "update exams_evaluation set student_id=?, exam_id=?, correct_answer=?, wrong_answer=?, pass_question=?, isExpelled=?";
+		try {
+			PreparedStatement pst = con.prepareStatement(query);
+			pst.setLong(1, eev.getStudent_id());
+			pst.setInt(2, eev.getExam_id());
+			pst.setInt(3, eev.getCorrect_answer());
+			pst.setInt(4, eev.getWrong_answer());
+			pst.setInt(5, eev.getPass_question());
+			pst.setInt(6, eev.getIsExpelled());
+			f = pst.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return f;
+	}
+
+	public ArrayList<Exams> getAllParticipatedExamById(Long student_id) {
+		ArrayList<Exams> examList = new ArrayList<Exams>();
+		String query = "select e.exam_id, e.exam_name, e.exam_teacher, e.exam_batch, e.exam_section, e.exam_course, e.exam_privacy, e.exam_duration, e.exam_question_amount, e.exam_mark, e.exam_start, e.exam_end, e.exam_isOver, e.exam_isApproved from exams e join exams_evaluation ev where e.exam_id=ev.exam_id and ev.student_id="
+				+ student_id;
+		query = query + " order by exam_end desc";
+		// System.out.println(query);
+		try {
+			PreparedStatement pst = con.prepareStatement(query);
+			ResultSet res = pst.executeQuery();
+			while (res.next()) {
+				Exams e = new Exams();
+				e.setExam_batch(res.getInt("exam_batch"));
+				e.setExam_course(res.getInt("exam_course"));
+				e.setExam_duration(res.getInt("exam_duration"));
+				e.setExam_end(res.getTimestamp("exam_end"));
+				e.setExam_id(res.getInt("exam_id"));
+				e.setExam_isApproved(res.getInt("exam_isApproved"));
+				e.setExam_isOver(res.getInt("exam_isOver"));
+				e.setExam_marks(res.getInt("exam_mark"));
+				e.setExam_name(res.getString("exam_name"));
+				e.setExam_privacy(res.getInt("exam_privacy"));
+				e.setExam_question_amount(res.getInt("exam_question_amount"));
+				e.setExam_section(res.getInt("exam_section"));
+				e.setExam_start(res.getTimestamp("exam_start"));
+				e.setExam_teacher(res.getLong("exam_teacher"));
+				examList.add(e);
+			}
+		} catch (SQLException e) {
+			System.out.println(e + " in ExamsDao; gellParticipatedExamById methon; line 429");
+		}
+		return examList;
+	}
+
+	public ExamsEvaluation getExamEvaluation(long student_id, int exam_id) {
+		ExamsEvaluation ev = new ExamsEvaluation();
+		String query = "select * from exams_evaluation where student_id=" + student_id + " and exam_id=" + exam_id;
+		try {
+			PreparedStatement pst = con.prepareStatement(query);
+			ResultSet res = pst.executeQuery();
+			if (res.next()) {
+				ev.setCorrect_answer(res.getInt("correct_answer"));
+				ev.setExam_id(res.getInt("exam_id"));
+				ev.setIsExpelled(res.getInt("isExpelled"));
+				ev.setPass_question(res.getInt("pass_question"));
+				ev.setStudent_id(res.getLong("student_id"));
+				ev.setWrong_answer(res.getInt("wrong_answer"));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e + " in ExamsDao; getExamEvaluaton method; line 450");
+		}
+		return ev;
+	}
+
+	public ArrayList<Exams> getPendingExam() {
+		ArrayList<Exams> pendingExamList = new ArrayList<Exams>();
+		String query = "select * from exams where exam_privacy=1 and exam_isApproved=0";
+		try {
+			PreparedStatement pst = con.prepareStatement(query);
+			ResultSet res = pst.executeQuery();
+			while (res.next()) {
+				Exams e = new Exams();
+				e.setExam_batch(res.getInt("exam_batch"));
+				e.setExam_course(res.getInt("exam_course"));
+				e.setExam_duration(res.getInt("exam_duration"));
+				e.setExam_end(res.getTimestamp("exam_end"));
+				e.setExam_id(res.getInt("exam_id"));
+				e.setExam_isApproved(res.getInt("exam_isApproved"));
+				e.setExam_isOver(res.getInt("exam_isOver"));
+				e.setExam_marks(res.getInt("exam_mark"));
+				e.setExam_name(res.getString("exam_name"));
+				e.setExam_privacy(res.getInt("exam_privacy"));
+				e.setExam_question_amount(res.getInt("exam_question_amount"));
+				e.setExam_section(res.getInt("exam_section"));
+				e.setExam_start(res.getTimestamp("exam_start"));
+				e.setExam_teacher(res.getLong("exam_teacher"));
+				pendingExamList.add(e);
+			}
+		} catch (SQLException exc) {
+			System.out.println(exc + " in ExamsDao; getAllExamById method; line 130");
+		}
+		return pendingExamList;
+	}
+
+	public int addStudentPermission(Exams e, ArrayList<Long> ids) {
+		int f = 0;
+		PreparedStatement pst = null;
+		try {
+			con.setAutoCommit(false);
+			for (Long id : ids) {
+				if (isAlredyPermited(id, e.getExam_id())==false) {
+					String query = "insert into exams_permission value(?,?,?)";
+					pst = con.prepareStatement(query);
+					pst.setInt(1, e.getExam_id());
+					pst.setLong(2, id);
+					pst.setTimestamp(3, new Timestamp(e.getExam_end().getTime() + (7 * 24 * 60 * 60 * 1000)));
+					f = pst.executeUpdate();
+					pst.close();
+					if (f == 0) {
+						con.rollback();
+						pst.close();
+						return 0;
+					}
+				}
+			}
+			String query = "update exams set exam_isApproved=1 where exam_id=" + e.getExam_id();
+			pst = con.prepareStatement(query);
+			f = pst.executeUpdate();
+			pst.close();
+			if (f >= 1) {
+				con.commit();
+			}
+		} catch (SQLException e1) {
+			try {
+				con.rollback();
+				pst.close();
+				return 0;
+			} catch (SQLException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return f;
+	}
+
+	public boolean isAlredyPermited(Long id, int exam_id) {
+		boolean f = false;
+		String query = "select count(*) from exams_permission where exam_id=" + exam_id + " and student_id=" + id;
+		try {
+			PreparedStatement pst = con.prepareStatement(query);
+			ResultSet res = pst.executeQuery();
+			if (res.next()) {
+				int f2 = res.getInt(1);
+				f = f2 == 0 ? false : true;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return f;
+	}
+
+	public ArrayList<Exams> getPermittedExam() {
+		ArrayList<Exams> permittedExamList = new ArrayList<Exams>();
+		String query = "select * from exams where exam_privacy=1 and exam_isApproved=1";
+		try {
+			PreparedStatement pst = con.prepareStatement(query);
+			ResultSet res = pst.executeQuery();
+			while (res.next()) {
+				Exams e = new Exams();
+				e.setExam_batch(res.getInt("exam_batch"));
+				e.setExam_course(res.getInt("exam_course"));
+				e.setExam_duration(res.getInt("exam_duration"));
+				e.setExam_end(res.getTimestamp("exam_end"));
+				e.setExam_id(res.getInt("exam_id"));
+				e.setExam_isApproved(res.getInt("exam_isApproved"));
+				e.setExam_isOver(res.getInt("exam_isOver"));
+				e.setExam_marks(res.getInt("exam_mark"));
+				e.setExam_name(res.getString("exam_name"));
+				e.setExam_privacy(res.getInt("exam_privacy"));
+				e.setExam_question_amount(res.getInt("exam_question_amount"));
+				e.setExam_section(res.getInt("exam_section"));
+				e.setExam_start(res.getTimestamp("exam_start"));
+				e.setExam_teacher(res.getLong("exam_teacher"));
+				permittedExamList.add(e);
+			}
+		} catch (SQLException exc) {
+			System.out.println(exc + " in ExamsDao; getAllExamById method; line 130");
+		}
+		return permittedExamList;
 	}
 
 }

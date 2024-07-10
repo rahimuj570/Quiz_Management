@@ -270,4 +270,33 @@
     <servlet-name>DeleteExamServlet</servlet-name>
     <url-pattern>/DeleteExamServlet</url-pattern>
   </servlet-mapping>
+  <filter>
+    <display-name>StudentFilter</display-name>
+    <filter-name>StudentFilter</filter-name>
+    <filter-class>filters.StudentFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>StudentFilter</filter-name>
+    <url-pattern>/student/*</url-pattern>
+  </filter-mapping>
+  <servlet>
+    <description></description>
+    <display-name>EvaluateExamServlet</display-name>
+    <servlet-name>EvaluateExamServlet</servlet-name>
+    <servlet-class>servlets.EvaluateExamServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>EvaluateExamServlet</servlet-name>
+    <url-pattern>/EvaluateExamServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ApprovedExamServlet</display-name>
+    <servlet-name>ApprovedExamServlet</servlet-name>
+    <servlet-class>servlets.ApprovedExamServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ApprovedExamServlet</servlet-name>
+    <url-pattern>/ApprovedExamServlet</url-pattern>
+  </servlet-mapping>
 </web-app>
