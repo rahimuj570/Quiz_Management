@@ -454,7 +454,7 @@ public class ExamsDao {
 
 	public ArrayList<Exams> getPendingExam() {
 		ArrayList<Exams> pendingExamList = new ArrayList<Exams>();
-		String query = "select * from exams where exam_privacy=1 and exam_isApproved=0";
+		String query = "select * from exams where exam_isApproved=0";
 		try {
 			PreparedStatement pst = con.prepareStatement(query);
 			ResultSet res = pst.executeQuery();
@@ -488,7 +488,7 @@ public class ExamsDao {
 		try {
 			con.setAutoCommit(false);
 			for (Long id : ids) {
-				if (isAlredyPermited(id, e.getExam_id())==false) {
+				if (isAlredyPermited(id, e.getExam_id()) == false) {
 					String query = "insert into exams_permission value(?,?,?)";
 					pst = con.prepareStatement(query);
 					pst.setInt(1, e.getExam_id());
@@ -571,6 +571,19 @@ public class ExamsDao {
 			System.out.println(exc + " in ExamsDao; getAllExamById method; line 130");
 		}
 		return permittedExamList;
+	}
+
+	public int approvedAllStudent(String exam_id) {
+		int f = 0;
+		String query = "update exams set exam_privacy=0, exam_isApproved=1 where exam_id="+exam_id;
+		try {
+			PreparedStatement pst = con.prepareStatement(query);
+			f = pst.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return f;
 	}
 
 }

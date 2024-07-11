@@ -213,8 +213,7 @@ ArrayList<QuestionSets> qsList = qs.getAllQuestionSet(cu.getUser_id());
 				type="submit" value="Create" />
 		</div>
 	</form>
-</body>
-<script>
+	<script>
 const file = document.getElementById('q_img');
 file.value='';
 document.getElementById('prev_div').style.display='none';
@@ -235,5 +234,6 @@ file.addEventListener('change',(e)=>{
 	
 })
 </script>
-<script src="./teacher.js"></script>
+	<script src="./teacher.js"></script>
+</body>
 </html>

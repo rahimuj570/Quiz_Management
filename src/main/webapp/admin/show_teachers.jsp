@@ -90,10 +90,10 @@
 				<td>
 					<%
 					if (user.getUser_is_admin() == 1) {
-					%> <button disabled
-						style="background: ">
-						Make Admin
-					</button> <%} else {%>
+					%>
+					<button disabled style="background:">Make Admin</button> <%
+ } else {
+ %>
 					<button
 						onclick="makeAdmin('<%=request.getContextPath()%>/MakeAdminServlet?user_id=<%=user.getUser_id()%>')"
 						style="background: cyan">
@@ -114,8 +114,8 @@
 
 		</table>
 	</div>
-</body>
-<script type="text/javascript">
+	<script src="./admin.js"></script>
+	<script type="text/javascript">
 let removeUser=(e)=>{
 	if(confirm('Are you sure to delete this user from the database?')){
 		location=e;
@@ -127,4 +127,5 @@ let makeAdmin=(e)=>{
 	}
 }
 </script>
+</body>
 </html>

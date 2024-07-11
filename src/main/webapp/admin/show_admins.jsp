@@ -85,12 +85,13 @@
 
 		</table>
 	</div>
-</body>
-<script type="text/javascript">
+	<script src="./admin.js"></script>
+	<script type="text/javascript">
 let removeUser=(e)=>{
 	if(confirm('Are you sure to remove this user as admin?')){
 		location=e;
 	}
 }
 </script>
+</body>
 </html>

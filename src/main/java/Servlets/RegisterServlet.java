@@ -55,22 +55,27 @@ public class RegisterServlet extends HttpServlet {
 		bs.setBatchId(Integer.parseInt(request.getParameter("batch")));
 		bs.setSectionId(Integer.parseInt(request.getParameter("section")));
 		System.out.println(u);
-		
-		
+
+		int f = -1;
 		VerifyPin verify_pin = new VerifyPin();
 		verify_pin.setPin_code(GeneratePinCode.getCode());
 		verify_pin.setUser_id(u.getUser_id());
 		GEmailSender gEmailSender = new GEmailSender();
-		//gEmailSender.sendEmail(u.getUser_email().strip(), "rujr2002@gmail.com", "Account Verification Code for QuizeManagement", "Your varification code is this 6 characters =>  " + verifyCode+"\n   (This code will expire in 10 minutes.)");
+		boolean f1 = gEmailSender.sendEmail(u.getUser_email().strip(), "rujr2002@gmail.com",
+				"Account Verification Code for QuizeManagement", "Your varification code is this 6 characters =>  "
+						+ verify_pin.getPin_code() + "\n   (This code will expire in 10 minutes.)");
 		VerifyPinsDao pinsDao = new VerifyPinsDao(ConnectionProvider.main());
-		//pinsDao.saveVerifyCode(verify_pin);
-		
+		if (f1) {
+			f = pinsDao.saveVerifyCode(verify_pin);
+		}
 
-		 UsersDao dao = new UsersDao(ConnectionProvider.main());
-		 int f = dao.saveUser(u, bs); 
-		 PrintWriter out = response.getWriter();
-		 System.out.println(f);
-		 out.print(f);
+		if (f == 1) {
+			UsersDao dao = new UsersDao(ConnectionProvider.main());
+			f = dao.saveUser(u, bs);
+		}
+		PrintWriter out = response.getWriter();
+		System.out.println(f);
+		out.print(f);
 	}
 
 	/**

@@ -67,7 +67,7 @@ td {
 <link rel="stylesheet" type="text/css" href="./teacher.css">
 </head>
 <body>
-
+	<%@include file="teacher_nav.jsp"%>
 
 	<%
 	BatchSectionDao bs = new BatchSectionDao(ConnectionProvider.main());
@@ -79,10 +79,11 @@ td {
 	ArrayList<BatchClass> classList = bs.getAllClass();
 	ArrayList<Course> courseList = bs.getAllCourse();
 	ArrayList<QuestionSets> qsList = qs.getAllQuestionSet(cu.getUser_id());
-	
-if(e.getExam_start().before(new Date(new Date().getTime()+10*60000))) {
-	session.setAttribute("update_exam_401", "Can't Modify Exam Now, Please Contact with Admin!");
-	response.sendRedirect(request.getContextPath() + "/teacher/show_exams.jsp");}
+
+	if (e.getExam_start().before(new Date(new Date().getTime() + 10 * 60000))) {
+		session.setAttribute("update_exam_401", "Can't Modify Exam Now, Please Contact with Admin!");
+		response.sendRedirect(request.getContextPath() + "/teacher/show_exams.jsp");
+	}
 
 	/////////////////
 	if (e.getExam_teacher().equals(cu.getUser_id())) {
@@ -269,8 +270,8 @@ if(e.getExam_start().before(new Date(new Date().getTime()+10*60000))) {
 	out.print("Authorization failed!!!");
 	}
 	%>
-</body>
-<script type="text/javascript">
+	<script src="./teacher.js"></script>
+	<script type="text/javascript">
 
 	document.getElementById('batch').value=`<%=e.getExam_batch()%>` 
 	document.getElementById('section').value=`<%=e.getExam_section()%>`
@@ -291,4 +292,5 @@ if(e.getExam_start().before(new Date(new Date().getTime()+10*60000))) {
 
 	//document.getElementById('exam_time').min = d.getHours() + ':'	+ d.getMinutes();
 </script>
+</body>
 </html>

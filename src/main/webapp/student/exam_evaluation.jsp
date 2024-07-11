@@ -16,6 +16,7 @@
 <link rel="stylesheet" type="text/css" href="student.css">
 </head>
 <body>
+	<%@include file="student_nav.jsp"%>
 	<%
 	String exam_id = request.getParameter("exam_id");
 	if (session.getAttribute("exam_valuation_BAD") != null) {
@@ -123,5 +124,6 @@
 	session.removeAttribute("current_exam_selected_options");
 	session.removeAttribute("current_exam_evaluation");
 	%>
+		 <script src="./student.js"></script> 
 </body>
 </html>

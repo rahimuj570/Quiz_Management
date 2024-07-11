@@ -75,12 +75,13 @@
 
 		</table>
 	</div>
-</body>
-<script type="text/javascript">
+	<script src="./admin.js"></script>
+	<script type="text/javascript">
 let removeUser=(e)=>{
 	if(confirm('Are you sure to delete this user from the database?')){
 		location=e;
 	}
 }
 </script>
+</body>
 </html>

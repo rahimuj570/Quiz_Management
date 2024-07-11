@@ -77,7 +77,11 @@ public class CreateExamServlet extends HttpServlet {
 				exm.setExam_isOver(0);
 			}
 			if(Integer.parseInt(texm.getExam_privacy())==0) {
-				exm.setExam_isApproved(1);
+				if(texm.getExam_name().contains("Mid") || texm.getExam_name().contains("Final")) {					
+					exm.setExam_isApproved(0);				
+				}else {					
+					exm.setExam_isApproved(1);
+				}
 			}else {
 				exm.setExam_isApproved(0);				
 			}

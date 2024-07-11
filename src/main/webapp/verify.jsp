@@ -203,7 +203,7 @@ document.getElementById("register_form").addEventListener("submit",(e)=>{
 			if(this.status===200){
 				if(this.responseText=='valid'){
 					alert('Successfully Verified!')
-					//window.location='login.jsp'
+					window.location='login.jsp'
 				}else if(this.responseText=='invalid'){
 					alert("Invalid Pin Code!")
 				}else if(this.responseText=='expire'){

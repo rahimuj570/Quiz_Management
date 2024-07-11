@@ -35,9 +35,9 @@
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
-<body oncontextmenu="return false" onselectstart="return false" onpaste="return false;"
-	onCopy="return false" onCut="return false" onDrag="return false"
-	onDrop="return false" autocomplete=off>
+<body oncontextmenu="return false" onselectstart="return false"
+	onpaste="return false;" onCopy="return false" onCut="return false"
+	onDrag="return false" onDrop="return false" autocomplete=off>
 	<%
 	Connection con = ConnectionProvider.main();
 	BatchSectionDao bsDao = new BatchSectionDao(ConnectionProvider.main());
@@ -45,56 +45,52 @@
 	Users cu = (Users) session.getAttribute("current_user");
 	GetBatchSectionOfStudentPOJO bs = bsDao.getBatchSectionOfStudent(cu.getUser_id());
 	Exams e = eDao.getExamById(request.getParameter("exam_id"));
-	if(!eDao.isAlredyPermited(cu.getUser_id(), e.getExam_id())){
-		response.sendRedirect(request.getContextPath()+"/student/my_exams.jsp");
-	}else{
-		
-	String query2 = "select count(*) from tmp_exam_entry where student_id=" + cu.getUser_id() + " and exam_id="
-			+ e.getExam_id();
-	PreparedStatement pst2 = con.prepareStatement(query2);
-	ResultSet res = pst2.executeQuery();
-	int isSecondTimeEntry = res.next() ? res.getInt(1) : 0;
-
-	if (request.getHeader("referer") != null && isSecondTimeEntry == 0 && e.getExam_id() != 0
-			&& request.getParameter("exam_id") != null && e != null && cu.getUser_is_teacher() == 0
-			&& bs.getBatchId() == (e.getExam_batch())
-			&& (bs.getSectionId() == (e.getExam_section()) || e.getExam_section() == 0)) {
-
-		if (!e.getExam_start().before(new Date(new Date().getTime()))) {
-			session.setAttribute("exam_early_entry", " Early entry is not allowed!");
-			response.sendRedirect("my_exams.jsp");
-		} else if (e.getExam_end().before(new Date(new Date().getTime()))) {
-			session.setAttribute("exam_over_entry", " Exam is Over!");
-			response.sendRedirect("my_exams.jsp");
-		} else {
-			ExamsEvaluation eev = new ExamsEvaluation();
-			eev.setCorrect_answer(0);
-			eev.setExam_id(e.getExam_id());
-			eev.setIsExpelled(1);
-			eev.setPass_question(e.getExam_question_amount());
-			eev.setStudent_id(cu.getUser_id());
-			eev.setWrong_answer(0);
-			eDao.createExamEvaluation(eev);
-			String query = "insert into tmp_exam_entry (student_id, exam_id) value (?,?);";
-			PreparedStatement pst = con.prepareStatement(query);
-			pst.setLong(1, cu.getUser_id());
-			pst.setInt(2, e.getExam_id());
-			pst.executeUpdate();
-		}
-
+	if (!eDao.isAlredyPermited(cu.getUser_id(), e.getExam_id()) && e.getExam_privacy() == 1) {
+		response.sendRedirect(request.getContextPath() + "/student/my_exams.jsp");
 	} else {
-		session.setAttribute("exam_violation", " You are not allowed entry due to violation of rules!");
+
+		String query2 = "select count(*) from tmp_exam_entry where student_id=" + cu.getUser_id() + " and exam_id="
+		+ e.getExam_id();
+		PreparedStatement pst2 = con.prepareStatement(query2);
+		ResultSet res = pst2.executeQuery();
+		int isSecondTimeEntry = res.next() ? res.getInt(1) : 0;
+
+		if (request.getHeader("referer") != null && isSecondTimeEntry == 0 && e.getExam_id() != 0
+		&& request.getParameter("exam_id") != null && e != null && cu.getUser_is_teacher() == 0
+		&& bs.getBatchId() == (e.getExam_batch())
+		&& (bs.getSectionId() == (e.getExam_section()) || e.getExam_section() == 0)) {
+
+			if (!e.getExam_start().before(new Date(new Date().getTime()))) {
+		session.setAttribute("exam_early_entry", " Early entry is not allowed!");
 		response.sendRedirect("my_exams.jsp");
-	}
+			} else if (e.getExam_end().before(new Date(new Date().getTime()))) {
+		session.setAttribute("exam_over_entry", " Exam is Over!");
+		response.sendRedirect("my_exams.jsp");
+			} else {
+		ExamsEvaluation eev = new ExamsEvaluation();
+		eev.setCorrect_answer(0);
+		eev.setExam_id(e.getExam_id());
+		eev.setIsExpelled(1);
+		eev.setPass_question(e.getExam_question_amount());
+		eev.setStudent_id(cu.getUser_id());
+		eev.setWrong_answer(0);
+		eDao.createExamEvaluation(eev);
+		String query = "insert into tmp_exam_entry (student_id, exam_id) value (?,?);";
+		PreparedStatement pst = con.prepareStatement(query);
+		pst.setLong(1, cu.getUser_id());
+		pst.setInt(2, e.getExam_id());
+		pst.executeUpdate();
+			}
+
+		} else {
+			session.setAttribute("exam_violation", " You are not allowed entry due to violation of rules!");
+			response.sendRedirect("my_exams.jsp");
+		}
 	%>
 	<div id="pdf_body">
-	<p style="position: fixed;
-  right: 20px;
-  border: 1px solid blue;
-  padding: 10px;
-  background: aquamarine;
-  cursor: no-drop;"
-		id="timer">12:22</p>
+		<p
+			style="position: fixed; right: 20px; border: 1px solid blue; padding: 10px; background: aquamarine; cursor: no-drop;"
+			id="timer">12:22</p>
 		<div>
 			<h1><%=e.getExam_name()%></h1>
 			<p>
@@ -201,7 +197,8 @@
 	</div>
 	<%
 	session.setAttribute("current_exam_selected_options", qaPOJOList);
-	}%>
+	}
+	%>
 </body>
 <script type="text/javascript">
 let ansForm = document.getElementById("ansForm");

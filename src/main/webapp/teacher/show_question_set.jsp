@@ -33,7 +33,7 @@ ArrayList<QuestionSets> qsList = qsDao.getAllQuestionSet(cu.getUser_id());
 BatchSectionDao bsDao = new BatchSectionDao(ConnectionProvider.main());
 %>
 <body>
-
+	<%@include file="teacher_nav.jsp"%>
 	<%
 	if (session.getAttribute("qs_delete_BAD") != null) {
 	%>
@@ -139,7 +139,8 @@ BatchSectionDao bsDao = new BatchSectionDao(ConnectionProvider.main());
 					</button></td>
 				<td>
 					<button style="background: #ffc6c6">
-						<a href="<%=request.getContextPath()%>/DeleteQuestionSetServlet?qs=<%=qs.getQs_id()%>">Delete</a>
+						<a
+							href="<%=request.getContextPath()%>/DeleteQuestionSetServlet?qs=<%=qs.getQs_id()%>">Delete</a>
 					</button>
 				</td>
 			</tr>
@@ -148,5 +149,6 @@ BatchSectionDao bsDao = new BatchSectionDao(ConnectionProvider.main());
 			%>
 		</table>
 	</div>
+	<script src="./teacher.js"></script>
 </body>
 </html>

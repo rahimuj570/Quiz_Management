@@ -44,8 +44,9 @@ public class ResentCodeServlet extends HttpServlet {
 		System.out.println(u.getUser_is_varified());
 		if (u.getUser_is_varified() == 1 || sc.getAttribute("verify_user_id") == null) {
 			response.getWriter().append("login_redirect");
-		}else {
-			String email = new UsersDao(ConnectionProvider.main()).checkExistUser((long) sc.getAttribute("verify_user_id"));
+		} else {
+			String email = new UsersDao(ConnectionProvider.main())
+					.checkExistUser((long) sc.getAttribute("verify_user_id"));
 			if (email != null) {
 				VerifyPinsDao dao = new VerifyPinsDao(ConnectionProvider.main());
 				VerifyPin vpin = dao.getVerifyCode((long) sc.getAttribute("verify_user_id"));
@@ -54,15 +55,15 @@ public class ResentCodeServlet extends HttpServlet {
 					verify_pin.setPin_code(GeneratePinCode.getCode());
 					verify_pin.setUser_id((long) sc.getAttribute("verify_user_id"));
 					GEmailSender gEmailSender = new GEmailSender();
-					// gEmailSender.sendEmail(email.strip(), "rujr2002@gmail.com", "Account
-					// Verification Code for QuizeManagement", "Your varification code is this 6
-					// characters => " + verify_pin.getPin_code()+"\n (This code will expire in
-					// 10minutes.)");
+					gEmailSender.sendEmail(email.strip(), "rujr2002@gmail.com",
+							"Account Verification Code for QuizeManagement",
+							"Your varification code is this 6characters => " + verify_pin.getPin_code()
+									+ "\n (This code will expire in10minutes.)");
 					VerifyPinsDao pinsDao = new VerifyPinsDao(ConnectionProvider.main());
 					int f = pinsDao.saveVerifyCode(verify_pin);
-					if(f==0) {
+					if (f == 0) {
 						response.getWriter().append("server_error");
-					}else {
+					} else {
 						response.getWriter().append("sent");
 					}
 				} else {
@@ -73,7 +74,6 @@ public class ResentCodeServlet extends HttpServlet {
 				response.getWriter().append("user_not_exist");
 			}
 		}
-		
 
 	}
 

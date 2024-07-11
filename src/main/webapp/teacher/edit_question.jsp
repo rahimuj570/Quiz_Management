@@ -220,16 +220,15 @@ if (q.getQ_teacher() != cu.getUser_id()) {
 				</select>
 			</div>
 		</div>
-	<input name="oldImg" type="hidden" value="<%=q.getQ_img()%>"/>
-	<input name="q_id" type="hidden" value="<%=q.getQ_id()%>"/>
-	<input id="deleteOldImg" name="deleteOldImg" type="hidden" value="0"/>
+		<input name="oldImg" type="hidden" value="<%=q.getQ_img()%>" /> <input
+			name="q_id" type="hidden" value="<%=q.getQ_id()%>" /> <input
+			id="deleteOldImg" name="deleteOldImg" type="hidden" value="0" />
 		<div>
 			<input style="width: 100px; height: 30px" name="btn" id="btn"
 				type="submit" value="Update" />
 		</div>
 	</form>
-</body>
-<script>
+	<script>
 document.getElementById('q_statement').value=`<%=q.getQ_statement()%>`;
 document.getElementById('opt_1').value=`<%=wrongOptList.get(0).getOpt_text()%>`;
 document.getElementById('opt_2').value=`<%=wrongOptList.get(1).getOpt_text()%>`;
@@ -264,5 +263,6 @@ file.addEventListener('change',(e)=>{
 	
 })
 </script>
-<script src="./teacher.js"></script>
+	<script src="./teacher.js"></script>
+</body>
 </html>

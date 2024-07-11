@@ -16,7 +16,7 @@
 	UsersDao u = new UsersDao(ConnectionProvider.main());
 	ArrayList<Users> uList = u.getUnapprovedUsers();
 	%>
-	<%@include file="admin_nav.jsp" %>
+	<%@include file="admin_nav.jsp"%>
 	<h1 class="center_txt">
 		Pending Users (<%=uList.size()%>)
 	</h1>
@@ -106,5 +106,6 @@
 
 		</table>
 	</div>
+	<script src="./admin.js"></script>
 </body>
 </html>

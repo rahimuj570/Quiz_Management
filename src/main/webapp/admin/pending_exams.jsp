@@ -33,8 +33,9 @@ BatchSectionDao bsDao = new BatchSectionDao(ConnectionProvider.main());
 %>
 
 <body>
+	<%@include file="admin_nav.jsp"%>
 	<div
-		style="text-align: center; margin: 20px 0px; border: 3px solid lime; padding: 10px 0px">
+		style="text-align: center; margin: 20px 0px; ">
 
 		<%
 		if (session.getAttribute("permission_OK") != null) {
@@ -120,5 +121,6 @@ BatchSectionDao bsDao = new BatchSectionDao(ConnectionProvider.main());
 			%>
 		</table>
 	</div>
+	<script src="./admin.js"></script>
 </body>
 </html>

@@ -37,10 +37,11 @@ BatchSectionDao bsDao = new BatchSectionDao(ConnectionProvider.main());
 %>
 
 <body>
+	<%@include file="teacher_nav.jsp"%>
 	<div
-		style="text-align:center; margin: 20px 0px; border: 3px solid lime; padding: 10px 0px">
-		<button onclick="location='create_exam.jsp'" style="margin-left: 10px; background: lime">Create
-			Question Set</button>
+		style="text-align: center; margin: 20px 0px; border: 3px solid lime; padding: 10px 0px">
+		<button onclick="location='create_exam.jsp'"
+			style="margin-left: 10px; background: lime">Create Exam</button>
 
 		<%
 		if (session.getAttribute("create_exam_OK") != null) {
@@ -108,11 +109,14 @@ BatchSectionDao bsDao = new BatchSectionDao(ConnectionProvider.main());
 				<td><%=e.getExam_marks()%>
 				<td><%=e.getExam_start()%>
 				<td><%=e.getExam_duration()%>
-				<td><%
-				if(e.getExam_end().before(new Date(new Date().getTime())))
-					out.print("Yes");
-				else out.print("No");
-%>
+				<td>
+					<%
+					if (e.getExam_end().before(new Date(new Date().getTime())))
+						out.print("Yes");
+					else
+						out.print("No");
+					%>
+				
 				<td><%=e.getExam_privacy() == 0 ? "Public" : "Protected"%></td>
 				<td><%=e.getExam_isApproved() == 1 ? "YES" : "NO"%></td>
 				<td>
@@ -133,5 +137,6 @@ BatchSectionDao bsDao = new BatchSectionDao(ConnectionProvider.main());
 			%>
 		</table>
 	</div>
+	<script src="./teacher.js"></script>
 </body>
 </html>

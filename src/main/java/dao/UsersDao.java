@@ -278,4 +278,18 @@ public class UsersDao {
 		return f;
 	}
 
+	public int changePassword(Users cu, String p) {
+		int f=0;
+		String query = "update users set user_password="+p+" where user_id="+cu.getUser_id();
+		try {
+			PreparedStatement pst = con.prepareStatement(query);
+			f = pst.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return f;
+	}
+
 }

@@ -1,3 +1,4 @@
+<%@page import="java.time.Year"%>
 <%@page import="entities.Users"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="helper.ConnectionProvider"%>
@@ -64,6 +65,7 @@ td {
 <link rel="stylesheet" type="text/css" href="./teacher.css">
 </head>
 <body>
+<%@include file="teacher_nav.jsp" %>
 	<%
 	BatchSectionDao bs = new BatchSectionDao(ConnectionProvider.main());
 	QuestionSetsDao qs = new QuestionSetsDao(ConnectionProvider.main());
@@ -88,9 +90,21 @@ td {
 			are mandatory to fill out!
 		</p>
 		<div>
-			<label for="exam_name">Exam Name<span class="danger_txt">*</span></label><br />
-			<input maxlength="100" type="text" required name="exam_name"
-				id="exam_name" />
+			<label for="id">Exam Name</label><br /> <select name="exam_name"
+				id="section">
+				<option
+					value="Final_Fall-<%=Integer.parseInt(Year.now().toString()) % 100%>">Final_Fall-<%=Integer.parseInt(Year.now().toString()) % 100%></option>
+				<option
+					value="Mid_Fall-<%=Integer.parseInt(Year.now().toString()) % 100%>">Mid_Fall-<%=Integer.parseInt(Year.now().toString()) % 100%></option>
+				<option
+					value="CT_Fall-<%=Integer.parseInt(Year.now().toString()) % 100%>">CT_Fall-<%=Integer.parseInt(Year.now().toString()) % 100%></option>
+				<option
+					value="Final_Spring-<%=Integer.parseInt(Year.now().toString()) % 100%>">Final_Spring-<%=Integer.parseInt(Year.now().toString()) % 100%></option>
+				<option
+					value="Mid_Spring-<%=Integer.parseInt(Year.now().toString()) % 100%>">Mid_Spring-<%=Integer.parseInt(Year.now().toString()) % 100%></option>
+				<option
+					value="CT_Spring-<%=Integer.parseInt(Year.now().toString()) % 100%>">CT_Spring-<%=Integer.parseInt(Year.now().toString()) % 100%></option>
+			</select>
 		</div>
 		<hr style="width: 100vh" />
 		<div>
@@ -185,7 +199,7 @@ td {
 				type="submit" value="Next" />
 		</div>
 	</form>
-</body>
+	 <script src="./teacher.js"></script> 
 <script type="text/javascript">
 	let d = new Date();
 	let date = d.getDate();
@@ -202,4 +216,5 @@ td {
 	document.getElementById('exam_time').min = d.getHours() + ':'
 			+ d.getMinutes();
 </script>
+</body>
 </html>

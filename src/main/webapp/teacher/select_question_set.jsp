@@ -18,11 +18,14 @@ th {
 	width: 1%;
 	border: 2px solid red;
 }
-td{
-border: 1px solid black;}
+
+td {
+	border: 1px solid black;
+}
 </style>
 </head>
 <body>
+	<%@include file="teacher_nav.jsp"%>
 	<%
 	BatchSectionDao bs = new BatchSectionDao(ConnectionProvider.main());
 	Users cu = (Users) session.getAttribute("current_user");
@@ -41,7 +44,7 @@ border: 1px solid black;}
 	esc.setExam_privacy(request.getParameter("privacy"));
 
 	ArrayList<QuestionSets> qsList = qs.getAllQuestionSet(cu.getUser_id(), esc.getExam_course(), esc.getExam_batch());
-	
+
 	session.setAttribute("temp_exam_create", esc);
 	%>
 	<%
@@ -133,7 +136,7 @@ border: 1px solid black;}
 	<hr style="width: 100%" />
 	<div style="overflow-x: auto;">
 		<table
-			style="text-align:center; width: 100%; border-spacing: 0; border: 2px solid black; display: block; overflow-y: scroll; max-height: 400px;">
+			style="text-align: center; width: 100%; border-spacing: 0; border: 2px solid black; display: block; overflow-y: scroll; max-height: 400px;">
 			<tr>
 				<th>MARK</th>
 				<th>Exam ID</th>
@@ -141,14 +144,14 @@ border: 1px solid black;}
 				<th>Questions Quantity</th>
 				<th>Section</th>
 			</tr>
-				<%
-	if (session.getAttribute("no_qs_select") != null) {
-	%>
-	<p class="center_txt danger_txt"><%=session.getAttribute("no_qs_select")%></p>
-	<%
-	session.removeAttribute("no_qs_select");
-	}
-	%>
+			<%
+			if (session.getAttribute("no_qs_select") != null) {
+			%>
+			<p class="center_txt danger_txt"><%=session.getAttribute("no_qs_select")%></p>
+			<%
+			session.removeAttribute("no_qs_select");
+			}
+			%>
 			<form method="post"
 				action="<%=request.getContextPath()%>/CreateExamServlet">
 				<%
@@ -168,15 +171,16 @@ border: 1px solid black;}
 				<div style="display: flex; gap: 10px">
 					<button>Add to Question Set</button>
 				</div>
-				
+
 			</form>
 		</table>
 	</div>
+	<script src="./teacher.js"></script>
+	<script type="text/javascript">
+		if (location.search.length < 2) {
+			history.back();
+		}
+	</script>
 </body>
 
-<script type="text/javascript">
-if(location.search.length<2){
-	history.back();
-}
-</script>
 </html>

@@ -97,13 +97,20 @@ BatchSectionDao bsDao = new BatchSectionDao(ConnectionProvider.main());
 				<td><%=e.getExam_duration()%> Minutes</td>
 				<td><%=e.getExam_privacy() == 0 ? "Public" : "Protected"%></td>
 				<%
-				if (eDao.isAlredyPermited(cu.getUser_id(), e.getExam_id())) {
+				if (e.getExam_privacy() == 0) {
 				%>
 				<td>
-					<button onclick="enterExam(<%=e.getExam_id() %>)" style="background: lime">
-						Enter
-					</button>
+					<button onclick="enterExam(<%=e.getExam_id()%>)"
+						style="background: lime">Enter</button>
 				</td>
+				<%
+				} else if (eDao.isAlredyPermited(cu.getUser_id(), e.getExam_id())) {
+				%>
+				<td>
+					<button onclick="enterExam(<%=e.getExam_id()%>)"
+						style="background: lime">Enter</button>
+				</td>
+
 				<%
 				} else {
 				%>

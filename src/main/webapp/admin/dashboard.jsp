@@ -11,5 +11,6 @@
 <body>
 	<%@include file="./admin_nav.jsp" %>
 	<center><h1>ADMIN DASHBOARD</h1></center>
+	 <script src="./admin.js"></script> 
 </body>
 </html>

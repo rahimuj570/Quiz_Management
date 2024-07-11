@@ -86,7 +86,7 @@ public class ForgotePasswordSentCodeServlet extends HttpServlet {
 					verify_pin.setIs_for_reset_password(1);
 					GEmailSender gEmailSender = new GEmailSender();
 					boolean f=false;
-					//f = gEmailSender.sendEmail(u.getUser_email().strip(), "rujr2002@gmail.com", "Account Verification Code for QuizeManagement", "Your varification code is this 6 characters =>  " + verify_pin.getPin_code()+"\n   (This code will expire in 10 minutes.)");
+					f = gEmailSender.sendEmail(u.getUser_email().strip(), "rujr2002@gmail.com", "Account Verification Code for QuizeManagement", "Your varification code is this 6 characters =>  " + verify_pin.getPin_code()+"\n   (This code will expire in 10 minutes.)");
 					pinsDao.saveVerifyCode(verify_pin);
 					if(f) {
 						sc.setAttribute("sent_forgot_pass", "Check Your Email!");

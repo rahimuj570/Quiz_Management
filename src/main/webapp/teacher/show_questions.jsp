@@ -23,6 +23,7 @@
 <link rel="stylesheet" type="text/css" href="teacher.css">
 </head>
 <body>
+	<%@include file="teacher_nav.jsp"%>
 	<%
 	Users cu = (Users) session.getAttribute("current_user");
 	BatchSectionDao bs = new BatchSectionDao(ConnectionProvider.main());
@@ -305,8 +306,8 @@
 			</form>
 		</table>
 	</div>
-</body>
-<script type="text/javascript">
+	<script src="./teacher.js"></script>
+	<script type="text/javascript">
 if(location.search.search("own")<0 && location.search.search("other")<0){	
 	document.getElementById('other').checked=1
 	document.getElementById('own').checked=1
@@ -346,4 +347,5 @@ if(location.search.search("qs")<0){
 		}
 	})
 	</script>
+</body>
 </html>
