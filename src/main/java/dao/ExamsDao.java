@@ -451,6 +451,28 @@ public class ExamsDao {
 		}
 		return ev;
 	}
+	public ArrayList<ExamsEvaluation> getAllExamEvaluation(int exam_id) {
+		ArrayList<ExamsEvaluation> evList = new ArrayList<ExamsEvaluation>();
+		String query = "SELECT * FROM exams_evaluation ev where exam_id="+exam_id+" order by correct_answer desc";
+		try {
+			PreparedStatement pst = con.prepareStatement(query);
+			ResultSet res = pst.executeQuery();
+			if (res.next()) {
+				ExamsEvaluation ev = new ExamsEvaluation();
+				ev.setCorrect_answer(res.getInt("correct_answer"));
+				ev.setExam_id(res.getInt("exam_id"));
+				ev.setIsExpelled(res.getInt("isExpelled"));
+				ev.setPass_question(res.getInt("pass_question"));
+				ev.setStudent_id(res.getLong("student_id"));
+				ev.setWrong_answer(res.getInt("wrong_answer"));
+				evList.add(ev);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e + " in ExamsDao; getExamEvaluaton method; line 450");
+		}
+		return evList;
+	}
 
 	public ArrayList<Exams> getPendingExam() {
 		ArrayList<Exams> pendingExamList = new ArrayList<Exams>();

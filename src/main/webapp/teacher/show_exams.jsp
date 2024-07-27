@@ -119,6 +119,7 @@ BatchSectionDao bsDao = new BatchSectionDao(ConnectionProvider.main());
 				
 				<td><%=e.getExam_privacy() == 0 ? "Public" : "Protected"%></td>
 				<td><%=e.getExam_isApproved() == 1 ? "YES" : "NO"%></td>
+				<%if(e.getExam_isOver()==0){ %>
 				<td>
 					<button style="background: cyan">
 						<a
@@ -131,6 +132,14 @@ BatchSectionDao bsDao = new BatchSectionDao(ConnectionProvider.main());
 							href="<%=request.getContextPath()%>/DeleteExamServlet?exam_id=<%=e.getExam_id()%>">Delete</a>
 					</button>
 				</td>
+				<%}else{ %>
+				<td colspan="2">
+					<button style="background: lime">
+						<a
+							href="show_results.jsp?exam_id=<%=e.getExam_id()%>">Show Student Result</a>
+					</button>
+				</td>				
+				<%} %>
 			</tr>
 			<%
 			}

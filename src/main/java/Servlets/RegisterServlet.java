@@ -61,17 +61,18 @@ public class RegisterServlet extends HttpServlet {
 		verify_pin.setPin_code(GeneratePinCode.getCode());
 		verify_pin.setUser_id(u.getUser_id());
 		GEmailSender gEmailSender = new GEmailSender();
-		boolean f1 = gEmailSender.sendEmail(u.getUser_email().strip(), "rujr2002@gmail.com",
-				"Account Verification Code for QuizeManagement", "Your varification code is this 6 characters =>  "
-						+ verify_pin.getPin_code() + "\n   (This code will expire in 10 minutes.)");
 		VerifyPinsDao pinsDao = new VerifyPinsDao(ConnectionProvider.main());
-		if (f1) {
-			f = pinsDao.saveVerifyCode(verify_pin);
-		}
+		f = pinsDao.saveVerifyCode(verify_pin);
 
 		if (f == 1) {
 			UsersDao dao = new UsersDao(ConnectionProvider.main());
 			f = dao.saveUser(u, bs);
+			if (f == 1) {
+				gEmailSender.sendEmail(u.getUser_email().strip(), "rujr2002@gmail.com",
+						"Account Verification Code for QuizeManagement",
+						"Your varification code is this 6 characters =>  " + verify_pin.getPin_code()
+								+ "\n   (This code will expire in 10 minutes.)");
+			}
 		}
 		PrintWriter out = response.getWriter();
 		System.out.println(f);

@@ -235,7 +235,7 @@ var myPDF = new jsPDF();
 myPDF.html(document.getElementById('pdf_body'),{
 	callback: async function(doc){
 	await myPDF.save('Submition_of_<%=e.getExam_name()%>.pdf');
-    //await setTimeout(window.close,10000);
+    await setTimeout(window.close(),10000);
 	},
 	x:5,
 	y:5,
@@ -245,12 +245,10 @@ myPDF.html(document.getElementById('pdf_body'),{
 	};
 	
 	window.onresize = function(){
-		 //if((window.outerHeight-window.innerHeight)>100){
-		   //alert('will close');}
+		 window.close();
 		}
 	window.onblur = function(){
-		 //if((window.outerHeight-window.innerHeight)>100){
-		   //alert('will close');}
+		 window.close();
 		}
 	
 	

@@ -281,7 +281,7 @@ document.getElementById("register_form").addEventListener("submit",(e)=>{
 			if(this.status===200){
 				if(this.responseText==1){
 					alert('Successfully Registered!')
-					window.location='login.jsp'
+					window.location='verify.jsp'
 				}else if(this.responseText==1062){
 					alert("ID or Email already Registered!")
 				}else{
