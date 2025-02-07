@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -45,6 +46,11 @@ public class DeleteQuestionServlet extends HttpServlet {
 			int f = qDao.deleteQuestionById(q_id);
 			if (f != 0) {
 				sc.setAttribute("question_delete_OK", "Successfully Deleted! ");
+
+				File file = new File(getServletContext().getRealPath("/") + File.separator + "q_img" + File.separator
+						+ q.getQ_img());
+				file.delete();
+
 				response.sendRedirect(request.getHeader("referer"));
 			} else {
 				sc.setAttribute("question_delete_BAD", "Can't Delete! ");

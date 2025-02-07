@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.util.Date;
 
 import org.apache.catalina.Session;
@@ -52,6 +53,7 @@ public class VerifyCodeServlet extends HttpServlet {
 			if (vpin.getPin_code()==null) {
 				response.getWriter().append("request_new_pin");
 			} else if (vpin.getExpire_date().before(new Date())) {
+				dao.reConnectDb(ConnectionProvider.main());
 				dao.deleteVerifyCode((long) sc.getAttribute("verify_user_id"));
 				response.getWriter().append("expire");
 			} else {
@@ -59,6 +61,7 @@ public class VerifyCodeServlet extends HttpServlet {
 					response.getWriter().append("valid");
 					int f = udao.verifiedUser((long) sc.getAttribute("verify_user_id"));
 					if(f==0)response.getWriter().append("server_error");
+					dao.reConnectDb(ConnectionProvider.main());
 					dao.deleteVerifyCode((long) sc.getAttribute("verify_user_id"));
 					sc.removeAttribute("verify_user_id");
 				} else {

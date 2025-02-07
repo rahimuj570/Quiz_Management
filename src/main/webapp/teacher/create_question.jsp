@@ -78,6 +78,15 @@ ArrayList<QuestionSets> qsList = qs.getAllQuestionSet(cu.getUser_id());
 		session.removeAttribute("question_create_fail");
 		}
 		%>
+		
+				<%
+		if (session.getAttribute("big_img") != null) {
+		%>
+		<p class="danger_txt"><%=session.getAttribute("big_img")%></p>
+		<%
+		session.removeAttribute("big_img");
+		}
+		%>
 		<p>
 			The fields that have this sign (<span class="danger_txt">*</span>)
 			are mandatory to fill out!

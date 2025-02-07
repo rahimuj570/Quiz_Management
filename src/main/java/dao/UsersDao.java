@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import entities.Users;
+import helper.ConnectionProvider;
 import helper.GetBatchSectionOfStudentPOJO;
 
 public class UsersDao {
@@ -16,8 +17,13 @@ public class UsersDao {
 		super();
 		this.con = con;
 	}
+	
+	public void reConnectDb(Connection con) {
+		this.con=con;
+	}
 
 	public int saveUser(Users u, GetBatchSectionOfStudentPOJO bs) {
+		con = ConnectionProvider.main();
 		int f = -1;
 		try {
 			con.setAutoCommit(false);
@@ -68,10 +74,17 @@ public class UsersDao {
 			e.printStackTrace();
 		}
 
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return f;
 	}
 
 	public Users getUser(String through, String email_id, String password) {
+		con = ConnectionProvider.main();
 		Users u = null;
 		String query_mail = "select * from users where user_email=? and user_password=?";
 		String query_id = "select * from users where user_id=? and user_password=?";
@@ -101,10 +114,17 @@ public class UsersDao {
 		} catch (SQLException e) {
 			System.out.println(e + "from usersDao; line 67");
 		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return u;
 	}
 
 	public ArrayList<Users> getUnapprovedUsers() {
+		con =ConnectionProvider.main();
 		ArrayList<Users> uList = new ArrayList<Users>();
 		Users u = null;
 		String query = "select user_id, user_email, user_first_name,user_last_name,user_is_teacher from users where user_is_approved=0";
@@ -127,10 +147,19 @@ public class UsersDao {
 		} catch (SQLException e) {
 			System.out.println(e + "from usersDao ; method getUnapproved; line 94");
 		}
+		
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return uList;
 	}
 
 	public int approvedUser(Long user_id) {
+		con = ConnectionProvider.main();
 		String query = "update users set user_is_approved=1 where user_id=?";
 		int f = 0;
 		try {
@@ -141,10 +170,23 @@ public class UsersDao {
 			// TODO Auto-generated catch block
 			System.out.println(e + "from userDao; method approbvedUser; lne 105");
 		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return f;
 	}
 
 	public int declineUser(Long user_id) {
+		con = ConnectionProvider.main();
 		String query = "delete from users where user_id=?";
 		int f = 0;
 		try {
@@ -155,10 +197,23 @@ public class UsersDao {
 			// TODO Auto-generated catch block
 			System.out.println(e + "from userDao; method declineUser; line 119");
 		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return f;
 	}
 
 	public ArrayList<Users> getUsersList(int role) {
+		con = ConnectionProvider.main();
 		// role:=> 0=admin; 1=teacher; 2=student;
 		ArrayList<Users> uList = new ArrayList<Users>();
 		Users u = null;
@@ -186,10 +241,17 @@ public class UsersDao {
 		} catch (SQLException e) {
 			System.out.println(e + "from usersDao ; method getUsersList; line 146");
 		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return uList;
 	}
 
 	public int makeAdmin(Long user_id) {
+		con = ConnectionProvider.main();
 		String query = "update users set user_is_admin=1 where user_id=?";
 		int f = 0;
 		try {
@@ -200,10 +262,23 @@ public class UsersDao {
 			// TODO Auto-generated catch block
 			System.out.println(e + "from userDao; method makeAdmin; lne 160");
 		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return f;
 	}
 
 	public int removeAdmin(Long user_id) {
+		con = ConnectionProvider.main();
 		String query = "update users set user_is_admin=0 where user_id=?";
 		int f = 0;
 		try {
@@ -214,10 +289,23 @@ public class UsersDao {
 			// TODO Auto-generated catch block
 			System.out.println(e + "from userDao; method removeAdmin; line 178");
 		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return f;
 	}
 
 	public int verifiedUser(Long user_id) {
+		con = ConnectionProvider.main();
 		String query = "update users set user_is_verify=1 where user_id=?";
 		int f = 0;
 		try {
@@ -228,10 +316,23 @@ public class UsersDao {
 			// TODO Auto-generated catch block
 			System.out.println(e + "from userDao; method verifiedUser; lne 196");
 		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return f;
 	}
 
 	public String checkExistUser(long user_id) {
+		con = ConnectionProvider.main();
 		String f = null;
 		String query = "select user_email as email from users where user_id=" + user_id;
 		try {
@@ -243,10 +344,23 @@ public class UsersDao {
 		} catch (SQLException e) {
 			System.out.println(e + " UsersDao ; method existUser; line 211");
 		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return f;
 	}
 
 	public Users getUserByEmail(String email) {
+		con = ConnectionProvider.main();
 		Users u = new Users();
 		String query = "select user_id, user_email, user_is_approved from users where user_email=?";
 		try {
@@ -261,10 +375,23 @@ public class UsersDao {
 		} catch (SQLException e) {
 			System.out.println(e + " UsersDao ; method getUserByEmail; line 227");
 		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return u;
 	}
 
 	public int editPassword(long id, String password) {
+		con = ConnectionProvider.main();
 		int f = 0;
 		String query = "update users set user_password=? where user_id=?";
 		try {
@@ -275,15 +402,40 @@ public class UsersDao {
 		} catch (SQLException e) {
 			System.out.println(e + " UsersDao ; method editPassword; line 243");
 		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return f;
 	}
 
 	public int changePassword(Users cu, String p) {
+		con = ConnectionProvider.main();
 		int f=0;
 		String query = "update users set user_password="+p+" where user_id="+cu.getUser_id();
 		try {
 			PreparedStatement pst = con.prepareStatement(query);
 			f = pst.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			con.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

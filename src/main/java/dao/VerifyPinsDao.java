@@ -10,6 +10,7 @@ import java.sql.Timestamp;
 import com.mysql.cj.protocol.Resultset;
 
 import entities.VerifyPin;
+import helper.ConnectionProvider;
 
 public class VerifyPinsDao {
 	Connection con;
@@ -17,8 +18,13 @@ public class VerifyPinsDao {
 	public VerifyPinsDao(Connection con) {
 		this.con = con;
 	}
+	
+	public void reConnectDb(Connection con) {
+		this.con=con;
+	}
 
 	public int saveVerifyCode(VerifyPin vpins) {
+		con = ConnectionProvider.main();
 		int f = 0;
 		String query = "insert into verify_pins value(?,?,?,?)";
 		try {
@@ -32,10 +38,23 @@ public class VerifyPinsDao {
 			// TODO Auto-generated catch block
 			System.out.println(e + " in VerifyPinsDAo; line 29");
 		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return f;
 	}
 
 	public VerifyPin getVerifyCode(long user_id) {
+		con = ConnectionProvider.main();
 		String query = "select * from verify_pins where user_id=" + user_id+" and is_for_reset_password=0";
 		VerifyPin pin = null;
 		try {
@@ -52,10 +71,17 @@ public class VerifyPinsDao {
 			// TODO Auto-generated catch block
 			System.out.println(e + " in VerifyPinsDAo; line 51");
 		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return pin;
 	}
 	
 	public VerifyPin getVerifyCode(long user_id, long is_forgot_pass) {
+		con = ConnectionProvider.main();
 		String query = "select * from verify_pins where user_id=" + user_id+" and is_for_reset_password=1";
 		VerifyPin pin = null;
 		try {
@@ -72,10 +98,17 @@ public class VerifyPinsDao {
 			// TODO Auto-generated catch block
 			System.out.println(e + " in VerifyPinsDAo; line 51");
 		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return pin;
 	}
 
 	public int deleteVerifyCode(long user_id) {
+		con = ConnectionProvider.main();
 		String query = "delete from verify_pins where user_id=" + user_id;
 		int f = 0;
 		try {
@@ -85,10 +118,17 @@ public class VerifyPinsDao {
 			// TODO Auto-generated catch block
 			System.out.println(e + " in VerifyPinsDAo; line 64");
 		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return f;
 	}
 	
 	public int deleteVerifyCode(long user_id, long is_forgot_pass) {
+		con = ConnectionProvider.main();
 		String query = "delete from verify_pins where user_id=" + user_id+ " and is_for_reset_password=1";
 		int f = 0;
 		try {
@@ -97,6 +137,12 @@ public class VerifyPinsDao {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			System.out.println(e + " in VerifyPinsDAo; line 64");
+		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return f;
 	}

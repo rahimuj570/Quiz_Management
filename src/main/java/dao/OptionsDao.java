@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import entities.Options;
+import helper.ConnectionProvider;
 
 public class OptionsDao {
 	Connection con;
@@ -17,6 +18,7 @@ public class OptionsDao {
 	}
 
 	public ArrayList<Options> getAllOptionsByQid(int q_id, int wrong, int right) {
+		con = ConnectionProvider.main();
 		ArrayList<Options> optList = new ArrayList<Options>();
 		String query = "select * from options where opt_question=" + q_id;
 		if (wrong != 0)
@@ -39,6 +41,12 @@ public class OptionsDao {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			System.out.println(e + " OptionDao; line 41");
+		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return optList;
 	}

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import entities.Options;
 import entities.Questions;
+import helper.ConnectionProvider;
 
 public class CreateQuestionDao {
 	Connection con;
@@ -19,6 +20,7 @@ public class CreateQuestionDao {
 	}
 
 	public int createQuestion(String allWrongOpt[], String allAns[], Questions questions, int question_set) {
+		con = ConnectionProvider.main();
 		int f = 0;
 
 		try {
@@ -82,6 +84,7 @@ public class CreateQuestionDao {
 			try {
 				f=0;
 				con.rollback();
+				con.close();
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
 				f=0;

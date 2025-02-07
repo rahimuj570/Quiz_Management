@@ -11,6 +11,7 @@ import org.apache.tomcat.dbcp.dbcp2.PStmtKey;
 
 import entities.Options;
 import entities.Questions;
+import helper.ConnectionProvider;
 import helper.ShowQuestionFilterPOJO;
 
 public class QuestionsDao {
@@ -22,6 +23,7 @@ public class QuestionsDao {
 	}
 
 	public ArrayList<Questions> getAllQuestion(ShowQuestionFilterPOJO q_pojo) {
+		con = ConnectionProvider.main();
 		ArrayList<Questions> qList = new ArrayList<Questions>();
 		String query = "select * from questions where (q_teacher=" + q_pojo.getQ_teacher() + " or q_privacy=" + 0 + ")";
 
@@ -71,17 +73,24 @@ public class QuestionsDao {
 				q.setQ_section(res.getInt("q_section"));
 				q.setQ_statement(res.getString("q_statement"));
 				q.setQ_subject(res.getInt("q_subject"));
-				q.setQ_teacher(res.getInt("q_teacher"));
+				q.setQ_teacher(res.getLong("q_teacher"));
 				qList.add(q);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			System.out.println(e + " QuestionDao; line 76");
 		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return qList;
 	}
 
 	public Questions getQuestionById(int id) {
+		con = ConnectionProvider.main();
 		Questions q = new Questions();
 		String query = "select * from questions where q_id=" + id;
 		try {
@@ -96,8 +105,14 @@ public class QuestionsDao {
 				q.setQ_section(res.getInt("q_section"));
 				q.setQ_statement(res.getString("q_statement"));
 				q.setQ_subject(res.getInt("q_subject"));
-				q.setQ_teacher(res.getInt("q_teacher"));
+				q.setQ_teacher(res.getLong("q_teacher"));
 			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			con.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -106,6 +121,7 @@ public class QuestionsDao {
 	}
 
 	public int updateQuestion(String allWrongOpt[], String allAns[], Questions questions, int q_id) {
+		con = ConnectionProvider.main();
 		int f = 0;
 
 		try {
@@ -178,37 +194,27 @@ public class QuestionsDao {
 	}
 
 	public int deleteQuestionById(String q_id) {
+		con = ConnectionProvider.main();
 		int f = 0;
 		try {
-			con.setAutoCommit(false);
-			String query = "delete from question_set_to_question_relation where q_id="+q_id;
+			String query = "delete from questions where q_id=" + q_id;
 			PreparedStatement pst = con.prepareStatement(query);
 			f = pst.executeUpdate();
 			pst.close();
-			if(f!=0) {	
-				System.out.println(22222);
-				//if(!pst.isClosed())pst.close();
-				query = "delete from questions where q_id="+q_id;
-				PreparedStatement pst2 = con.prepareStatement(query);
-//				pst = con.prepareStatement(query);
-				f = pst2.executeUpdate();
-				pst.close();
-				con.commit();
-			}
+			con.close();
 		} catch (SQLException e) {
 			System.out.println(3333);
 			f = 0;
-			try {
-				con.rollback();
-				con.close();
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
 			// TODO Auto-generated catch block
 			System.out.println(e + "QuestionDao;" + " line 198");
 		}
-		
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		return f;
 	}
 }

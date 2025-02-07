@@ -91,7 +91,7 @@
 	<%
 	if (session.getAttribute("other_question_delete") != null) {
 	%>
-	<p class="center_txt success_txt"><%=session.getAttribute("other_question_delete")%></p>
+	<p class="center_txt danger_txt"><%=session.getAttribute("other_question_delete")%></p>
 	<%
 	session.removeAttribute("other_question_delete");
 	}
@@ -188,7 +188,7 @@
 				<th>See Details</th>
 				<th>Edit</th>
 				<%
-				if (request.getParameter("qs") != null) {
+				if (request.getParameter("qs") != null && !request.getParameter("qs").equals("0")) {
 				%>
 				<th>Remove</th>
 				<%
@@ -222,11 +222,22 @@
 	out.print(o.getOpt_text());%>\n<%}%>\nRight options : \n <%for (var o : optList2) {
 	out.print(o.getOpt_text());%>\n<%}%> \nBatch: <%=q.getQ_batch()%>\nDificulty Level: <%=q.getQ_difficulty()%>\nPrivacy Level: <%=q.getQ_privacy()%>'); return false; "
 							style="background: lime">See Details</button></td>
-					<td><button style="background: gold">
-							<a href="edit_question.jsp?q_id=<%=q.getQ_id()%>">Edit</a>
-						</button></td>
+					<td>
+					<%if(q.getQ_teacher()==cu.getUser_id()){%>
+					<button
+					
+					onclick="location=`<%=request.getContextPath()%>/teacher/edit_question.jsp?q_id=<%=q.getQ_id()%>`;return false;"
+					
+					 style="background: gold">
+							Edit
+						</button>
+						<%}else{ %>
+						<button onclick="return false;" disabled="disabled">
+							Edit</button>
+						<%} %>
+						</td>
 					<%
-					if (request.getParameter("qs") != null) {
+					if (request.getParameter("qs") != null && !request.getParameter("qs").equals("0")) {
 					%>
 					<td>
 						<button style="background: #ffc6c6">

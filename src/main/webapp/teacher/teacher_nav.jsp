@@ -3,7 +3,7 @@
 <nav>
 	<ul class="nav_ul">
 		<li><a href="#">LOGO</a></li>
-		<li><a href="<%=request.getContextPath()%>/admin/dashboard.jsp">Home</a></li>
+		<li><a href="dashboard.jsp">Home</a></li>
 		<li><a href="create_question.jsp">Create Question</a></li>
 		<li><a href="show_question_set.jsp">Question Sets</a></li>
 		<li><a href="show_questions.jsp">Show Questions</a></li>
