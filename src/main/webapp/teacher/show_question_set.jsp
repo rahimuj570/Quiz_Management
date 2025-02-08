@@ -63,7 +63,7 @@ BatchSectionDao bsDao = new BatchSectionDao(ConnectionProvider.main());
 		style="margin: 20px 0px; border: 3px solid lime; padding: 10px 0px"
 		action="<%=request.getContextPath()%>/CreateQuestionSetServlet"
 		method="post">
-		<label for="qs_name">Set Name</label> <input id="qs_name"
+		<label for="qs_name">Set Name</label> <input required="required" id="qs_name"
 			name="qs_name" type="text" /> <label for="id">Course</label><select
 			name="course" id="course">
 			<%

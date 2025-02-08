@@ -8,6 +8,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import entities.QuestionSets;
+import helper.ConnectionProvider;
 
 public class QuestionSetsDao {
 	Connection con;
@@ -17,8 +18,9 @@ public class QuestionSetsDao {
 	}
 
 	public ArrayList<QuestionSets> getAllQuestionSet(Long uid) {
+		con = ConnectionProvider.main();
 		ArrayList<QuestionSets> setList = new ArrayList<QuestionSets>();
-		String query = "select * from question_sets where qs_teacher=" + uid+" order by qs_id desc";
+		String query = "select * from question_sets where qs_teacher=" + uid + " order by qs_id desc";
 		try {
 			PreparedStatement pst = con.prepareStatement(query);
 			ResultSet res = pst.executeQuery();
@@ -36,11 +38,20 @@ public class QuestionSetsDao {
 		} catch (SQLException e) {
 			System.out.println(e + " in QuestionSetsDao; gellAllQSet methon; line 36");
 		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return setList;
 	}
+
 	public ArrayList<QuestionSets> getAllQuestionSet(Long uid, String courseId, String batchhId) {
+		con = ConnectionProvider.main();
 		ArrayList<QuestionSets> setList = new ArrayList<QuestionSets>();
-		String query = "select * from question_sets where qs_teacher=" + uid+" and qs_course="+courseId+" and qs_batch="+batchhId+" order by qs_id desc";
+		String query = "select * from question_sets where qs_teacher=" + uid + " and qs_course=" + courseId
+				+ " and qs_batch=" + batchhId + " order by qs_id desc";
 		try {
 			PreparedStatement pst = con.prepareStatement(query);
 			ResultSet res = pst.executeQuery();
@@ -57,11 +68,18 @@ public class QuestionSetsDao {
 			}
 		} catch (SQLException e) {
 			System.out.println(e + " in QuestionSetsDao; gellAllQSet methon; line 36");
+		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return setList;
 	}
 
 	public QuestionSets getQuestionSetById(String qs_id) {
+		con = ConnectionProvider.main();
 		QuestionSets qs = new QuestionSets();
 		String query = "select * from question_sets where qs_id=" + qs_id;
 		try {
@@ -79,24 +97,39 @@ public class QuestionSetsDao {
 		} catch (SQLException e) {
 			System.out.println(e + " in QuestionSetsDao; gellQSet methon; line 58");
 		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return qs;
 	}
+
 	public Long getTeacherOfQuestionSetId(String qs_id) {
+		con = ConnectionProvider.main();
 		Long teacherId = null;
 		String query = "select qs_teacher from question_sets where qs_id=" + qs_id;
 		try {
 			PreparedStatement pst = con.prepareStatement(query);
 			ResultSet res = pst.executeQuery();
 			if (res.next()) {
-				teacherId=res.getLong(1);
+				teacherId = res.getLong(1);
 			}
 		} catch (SQLException e) {
 			System.out.println(e + " in QuestionSetsDao; gellTeacherIDQSet method; line 94");
+		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return teacherId;
 	}
 
 	public int getTotalQuestionAmount(int id) {
+		con = ConnectionProvider.main();
 		int amount = 0;
 		String query = "select count(*) from question_set_to_question_relation where qs_id=" + id;
 		try {
@@ -107,10 +140,17 @@ public class QuestionSetsDao {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return amount;
 	}
 
 	public int createQuestionSet(QuestionSets qs) {
+		con = ConnectionProvider.main();
 		int f = 0;
 		String query = "insert into question_sets (qs_name,qs_teacher, qs_section, qs_batch, qs_course,qs_created) value (?,?,?,?,?,?)";
 		try {
@@ -125,10 +165,17 @@ public class QuestionSetsDao {
 		} catch (SQLException e) {
 			System.out.println(e + " QuestionSetDao; method createQuestionSet; line 67");
 		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return f;
 	}
 
 	public int addToQuestionSet(String qs_id, String q_ids[]) {
+		con = ConnectionProvider.main();
 		int f = 0;
 		try {
 			for (String s : q_ids) {
@@ -140,11 +187,17 @@ public class QuestionSetsDao {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return f;
 	}
 
 	public int removeToQuestionSet(String qs_id, String q_id) {
+		con = ConnectionProvider.main();
 		int f = 0;
 		String query = "delete from question_set_to_question_relation where q_id=" + q_id + " and qs_id=" + qs_id;
 		try {
@@ -154,29 +207,25 @@ public class QuestionSetsDao {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return f;
 	}
-	
+
 	public int deleteQuestionSetById(String qs_id) {
+		con = ConnectionProvider.main();
 		int f = 0;
 		try {
-			con.setAutoCommit(false);
-			String query = "delete from question_set_to_question_relation where qs_id="+qs_id;
-			PreparedStatement pst = con.prepareStatement(query);
-			f = pst.executeUpdate();
-			pst.close();
-			if(f!=0) {	
-				System.out.println(22222);
-				//if(!pst.isClosed())pst.close();
-				query = "delete from question_sets where qs_id="+qs_id;
-				PreparedStatement pst2 = con.prepareStatement(query);
-//				pst = con.prepareStatement(query);
-				f = pst2.executeUpdate();
-				pst.close();
-				con.commit();
-			}
+
+			String query = "delete from question_sets where qs_id=" + qs_id;
+			PreparedStatement pst2 = con.prepareStatement(query);
+			f = pst2.executeUpdate();
+			con.close();
 		} catch (SQLException e) {
-			System.out.println(3333);
 			f = 0;
 			try {
 				con.rollback();
@@ -188,7 +237,7 @@ public class QuestionSetsDao {
 			// TODO Auto-generated catch block
 			System.out.println(e + "QuestionDao;" + " line 198");
 		}
-		
+
 		return f;
 	}
 }

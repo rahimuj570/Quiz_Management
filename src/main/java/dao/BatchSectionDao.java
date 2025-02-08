@@ -10,6 +10,7 @@ import java.util.List;
 import entities.BatchClass;
 import entities.Course;
 import entities.Sections;
+import helper.ConnectionProvider;
 import helper.GetBatchSectionOfStudentPOJO;
 
 public class BatchSectionDao {
@@ -21,6 +22,7 @@ public class BatchSectionDao {
 	}
 
 	public ArrayList<Sections> getAllSection() {
+		con = ConnectionProvider.main();
 		ArrayList<Sections> sectionList = new ArrayList<Sections>();
 		String query = "select * from sections order by id";
 		try {
@@ -34,10 +36,17 @@ public class BatchSectionDao {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return sectionList;
 	}
 
 	public ArrayList<BatchClass> getAllClass() {
+		con = ConnectionProvider.main();
 		ArrayList<BatchClass> classList = new ArrayList<BatchClass>();
 		String query = "select * from batch_class";
 		try {
@@ -51,10 +60,18 @@ public class BatchSectionDao {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return classList;
 	}
 
 	public ArrayList<Course> getAllCourse() {
+		con = ConnectionProvider.main();
 		ArrayList<Course> courseList = new ArrayList<Course>();
 		String query = "select * from course";
 		try {
@@ -68,10 +85,17 @@ public class BatchSectionDao {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return courseList;
 	}
 
 	public String getSectionNameById(int id) {
+		con = ConnectionProvider.main();
 		String sec_name = "";
 		String query = "select section_name from sections where id=" + id;
 		try {
@@ -82,10 +106,17 @@ public class BatchSectionDao {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return sec_name;
 	}
 
 	public String getCourseNameById(int id) {
+		con = ConnectionProvider.main();
 		String sec_name = "";
 		String query = "select course_name from course where course_id=" + id;
 		try {
@@ -96,10 +127,17 @@ public class BatchSectionDao {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return sec_name;
 	}
 
 	public String getBatchNameById(int id) {
+		con = ConnectionProvider.main();
 		String sec_name = "";
 		String query = "select batch_class from batch_class where id=" + id;
 		try {
@@ -110,10 +148,17 @@ public class BatchSectionDao {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return sec_name;
 	}
 	
 	public GetBatchSectionOfStudentPOJO getBatchSectionOfStudent(Long student_id) {
+		con = ConnectionProvider.main();
 		GetBatchSectionOfStudentPOJO bss = new GetBatchSectionOfStudentPOJO();
 		String query="select * from batch_section_user_relation where user_id="+student_id;
 		try {
@@ -123,6 +168,12 @@ public class BatchSectionDao {
 				bss.setBatchId(res.getInt(2));
 				bss.setSectionId(res.getInt(3));
 			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			con.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
