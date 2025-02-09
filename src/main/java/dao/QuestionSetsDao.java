@@ -119,12 +119,12 @@ public class QuestionSetsDao {
 		} catch (SQLException e) {
 			System.out.println(e + " in QuestionSetsDao; gellTeacherIDQSet method; line 94");
 		}
-		try {
-			con.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+////			con.close();
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		return teacherId;
 	}
 

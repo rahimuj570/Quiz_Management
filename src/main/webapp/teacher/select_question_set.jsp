@@ -158,8 +158,15 @@ td {
 				for (var q : qsList) {
 				%>
 				<tr>
+				
+				<%if(qs.getTotalQuestionAmount(q.getQs_id())<5){ %>
+				<td><input name="mark[]" type="checkbox" disabled="disabled"
+						value="<%=q.getQs_id()%>" /></td>
+				<%} else{%>
 					<td><input name="mark[]" type="checkbox"
 						value="<%=q.getQs_id()%>" /></td>
+						<%} %>
+						
 					<td><%=q.getQs_id()%></td>
 					<td><%=q.getQs_name()%></td>
 					<td><%=qs.getTotalQuestionAmount(q.getQs_id())%></td>

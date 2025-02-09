@@ -135,6 +135,7 @@ td {
 			<label for="exam_time">Exam Time <span class='danger_txt'>*</span></label><br />
 			<input required name="exam_time" id="exam_time" type="time" />
 		</div>
+		<input hidden="true" required="required" id="datetime_prev" type="datetime-local" name="date_prev"/>
 		<div>
 			<label for="exam_duration">Exam Duration (in minutes) <span
 				class='danger_txt'>*</span></label><br /> <input value='10' min="10"
@@ -207,14 +208,35 @@ td {
 	date = date.toString().length == 1 ? '0' + date : date;
 	month = month.toString().length == 1 ? '0' + month : month;
 	const year = d.getFullYear();
-	document.getElementById('exam_start').min = year + '-' + month + '-' + date;
-	const currentDate = new Date();
+
+	let currentDate = new Date();
 	let hours = currentDate.getHours();
 	let minutes = currentDate.getMinutes();
 	let meridiem = hours >= 12 ? 'PM' : 'AM';
+	
+	document.getElementById('datetime_prev').min=year+"-"+month+"-"+date+"T"+hours+":"+minutes;
+	const datepick=document.getElementById('exam_start');
+	const timepick= document.getElementById('exam_time');
+	
+	
+	datepick.addEventListener('change',(e)=>{		
+	document.getElementById('datetime_prev').value = datepick.value+"T"+timepick.value;
+	console.log(document.getElementById('exam_start').value+"T"+document.getElementById('exam_time').value);
+	})
+	timepick.addEventListener('change',(e)=>{		
+	document.getElementById('datetime_prev').value = datepick.value+"T"+timepick.value;
+	console.log(document.getElementById('exam_start').value+"T"+document.getElementById('exam_time').value);
+	})
+	
+	
+	document.getElementById('btn').addEventListener('click',(e)=>{
+		const selectedDate = new Date(document.getElementById('datetime_prev').value);
+		if(selectedDate<new Date()){			
+		alert("Invalid Date/Time!")
+		e.preventDefault();
+		}
+	})
 
-	document.getElementById('exam_time').min = d.getHours() + ':'
-			+ d.getMinutes();
 </script>
 </body>
 </html>

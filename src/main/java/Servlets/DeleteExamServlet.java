@@ -49,7 +49,7 @@ public class DeleteExamServlet extends HttpServlet {
 					sc.setAttribute("update_exam_BAD", "Something Went Wrong!");
 					response.sendRedirect(request.getHeader("referer"));
 				} else {
-					sc.setAttribute("delete_exam_OK", "Successfully Exam Updated!");
+					sc.setAttribute("delete_exam_OK", "Successfully Exam Deleted!");
 					response.sendRedirect(request.getContextPath() + "/teacher/show_exams.jsp");
 				}
 			}
