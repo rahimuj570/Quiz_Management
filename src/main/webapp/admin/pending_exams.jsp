@@ -109,10 +109,21 @@ BatchSectionDao bsDao = new BatchSectionDao(ConnectionProvider.main());
 					%>
 				
 				<td>
+				
+				<%
+				if(e.getExam_privacy()==0){%>
+				<button style="background: cyan">
+						<a
+							href="<%=request.getContextPath()%>/ApprovedAllStudent?exam_id=<%=e.getExam_id()%>">Approved</a>
+					</button>
+					
+				<%}else{
+				%>
 					<button style="background: cyan">
 						<a
 							href="<%=request.getContextPath()%>/admin/select_students.jsp?exam_id=<%=e.getExam_id()%>">Approved</a>
 					</button>
+					<%} %>
 				</td>
 
 			</tr>

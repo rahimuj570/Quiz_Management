@@ -158,14 +158,10 @@ td {
 				for (var q : qsList) {
 				%>
 				<tr>
+
+					<td><input class="checkboxes" name="mark[]" type="checkbox"
+						value="<%=q.getQs_id()%>" /></td>
 				
-				<%if(qs.getTotalQuestionAmount(q.getQs_id())<5){ %>
-				<td><input name="mark[]" type="checkbox" disabled="disabled"
-						value="<%=q.getQs_id()%>" /></td>
-				<%} else{%>
-					<td><input name="mark[]" type="checkbox"
-						value="<%=q.getQs_id()%>" /></td>
-						<%} %>
 						
 					<td><%=q.getQs_id()%></td>
 					<td><%=q.getQs_name()%></td>
@@ -176,7 +172,7 @@ td {
 				}
 				%>
 				<div style="display: flex; gap: 10px">
-					<button>Add to Question Set</button>
+					<button id="addSet">Add to Question Set</button>
 				</div>
 
 			</form>
@@ -184,9 +180,29 @@ td {
 	</div>
 	<script src="./teacher.js"></script>
 	<script type="text/javascript">
+	const exam_question_requirement = new URLSearchParams(location.search).get('exam_question_amount')-'0';
+	let q_count=0;
 		if (location.search.length < 2) {
 			history.back();
 		}
+		
+		Array.from(document.getElementsByClassName("checkboxes")).forEach((d,index)=>{
+			d.addEventListener('change',(e)=>{
+				let parent = e.target.parentElement.parentElement.children[3];
+				if(e.target.checked==true){					
+				q_count+=parent.innerText-'0';
+				}else{
+				q_count-=parent.innerText-'0';					
+				}
+				console.log(q_count);
+				const btn = document.getElementById("addSet");
+				if(q_count<exam_question_requirement){
+					btn.disabled=true;
+				}else{
+					btn.disabled=false;
+				}
+			})
+		})
 	</script>
 </body>
 

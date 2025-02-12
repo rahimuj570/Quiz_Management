@@ -295,7 +295,7 @@ public class ExamsDao {
 			query = query + " and exam_course=" + courseId;
 		}
 		query = query + " order by exam_start desc";
-		// System.out.println(query);
+		 System.out.println(query);
 		try {
 			PreparedStatement pst = con.prepareStatement(query);
 			ResultSet res = pst.executeQuery();
