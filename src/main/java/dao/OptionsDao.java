@@ -50,4 +50,30 @@ public class OptionsDao {
 		}
 		return optList;
 	}
+	
+	
+	   public String getOptionStatementByOptId(int opt_id) {
+		   	con = ConnectionProvider.main();
+		      String s = "";
+		      String query = "select opt_text from options where opt_id=" + opt_id;
+
+		      try {
+		         PreparedStatement pst = this.con.prepareStatement(query);
+		         ResultSet res = pst.executeQuery();
+		         if (res.next()) {
+		            s = res.getString("opt_text");
+//		            con.close();
+		         }
+		      } catch (SQLException e) {
+		         e.printStackTrace();
+//		         try {
+//					con.close();
+//				} catch (SQLException e1) {
+//					// TODO Auto-generated catch block
+//					e1.printStackTrace();
+//				}
+		      }
+
+		      return s;
+		   }
 }

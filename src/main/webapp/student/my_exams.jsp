@@ -127,7 +127,7 @@ BatchSectionDao bsDao = new BatchSectionDao(ConnectionProvider.main());
 	<script src="./student.js"></script>
 	<script type="text/javascript">
 	let enterExam=(exam_id)=>{	
-	 if (confirm('You have only one chance to complete this exam. If somehow this tab close, then you will be expelled.Tab can be closed via some illegal action. Here are the criteria:\n\n1) If you change the exam tab,\n2) If you minimize the browser,\n3) If you try to change the size of the browser window,\n4) If you try to open "inspect tool" or "web tool",\n5) If you refresh/reload the exam tab.\n\nSo be careful about the rules. If you agree, click "ok" and participate the exam.')) {
+	 if (confirm('You have only one chance to complete this exam. If somehow this tab close, then you will be expelled.Tab can be closed via some illegal action. Here are the criteria:\n\n1) If you change the exam tab,\n2) If you minimize the browser,\n3) If you try to change the size of the browser window,\n4) If you try to open "inspect tool" or "web tool",\n5) If you refresh/reload the exam tab.\n6) Must grant pop-up permission if system requires\n\nSo be careful about the rules. If you agree, click "ok" and participate the exam.')) {
 				var a = document.createElement('a');
 				a.target="_blank";
   				a.href="<%=request.getContextPath()%>/student/exam.jsp?exam_id="+exam_id;

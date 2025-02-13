@@ -1,3 +1,4 @@
+<%@page import="java.util.Map"%>
 <%@page import="helper.GetBatchSectionOfStudentPOJO"%>
 <%@page import="entities.BatchClass"%>
 <%@page import="entities.ExamsEvaluation"%>
@@ -28,12 +29,7 @@
 	grid-template-columns: repeat(2, 1fr);
 }
 </style>
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
-	integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA=="
-	crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 </head>
 <body oncontextmenu="return false" onselectstart="return false"
 	onpaste="return false;" onCopy="return false" onCut="return false"
@@ -48,7 +44,7 @@
 	if (!eDao.isAlredyPermited(cu.getUser_id(), e.getExam_id()) && e.getExam_privacy() == 1) {
 		response.sendRedirect(request.getContextPath() + "/student/my_exams.jsp");
 	} else {
-
+		con = ConnectionProvider.main();
 		String query2 = "select count(*) from tmp_exam_entry where student_id=" + cu.getUser_id() + " and exam_id="
 		+ e.getExam_id();
 		PreparedStatement pst2 = con.prepareStatement(query2);
@@ -75,6 +71,7 @@
 		eev.setStudent_id(cu.getUser_id());
 		eev.setWrong_answer(0);
 		eDao.createExamEvaluation(eev);
+		con = ConnectionProvider.main();
 		String query = "insert into tmp_exam_entry (student_id, exam_id) value (?,?);";
 		PreparedStatement pst = con.prepareStatement(query);
 		pst.setLong(1, cu.getUser_id());
@@ -189,11 +186,10 @@
 
 			</section>
 			<div style="text-align: center; padding: 20px">
-				<button class="dis"
+				<button id=submitBtn
 					style="padding: 10px 20px; background: greenyellow; border-radius: 5px; cursor: pointer;">Submit</button>
 			</div>
 		</form>
-		<button onclick="funct()">sss</button>
 	</div>
 	<%
 	session.setAttribute("current_exam_selected_options", qaPOJOList);
@@ -201,6 +197,7 @@
 	%>
 </body>
 <script type="text/javascript">
+document.title="<%=e.getExam_name()%>";
 let ansForm = document.getElementById("ansForm");
 	ansForm.addEventListener('submit',async (e)=>{	
 	e.preventDefault();
@@ -215,7 +212,7 @@ let ansForm = document.getElementById("ansForm");
     for(var dis of btnDiss){
     	dis.hidden=true;
     }
-    //await funct();
+    console.log(queryString);
    await window.open("<%=request.getContextPath()%>/EvaluateExamServlet?"+queryString,"_blank");
 })
 
@@ -229,20 +226,7 @@ e.target.parentElement.children[i].children[0].checked=false;
 
 
 
-let funct=()=>{
-window.jsPDF = window.jspdf.jsPDF;
-var myPDF = new jsPDF();
-myPDF.html(document.getElementById('pdf_body'),{
-	callback: async function(doc){
-	await myPDF.save('Submition_of_<%=e.getExam_name()%>.pdf');
-    await setTimeout(window.close(),10000);
-	},
-	x:5,
-	y:5,
-	width:200,
-	windowWidth: 1000
-})
-	};
+
 	
 	window.onresize = function(){
 		 window.close();
@@ -261,18 +245,24 @@ myPDF.html(document.getElementById('pdf_body'),{
 			document.getElementsByTagName('body')[0].style.cursor='no-drop' 
 		}
 		if(remaining<1){
+
+			console.log('end');
+			
 		    let diss = document.getElementsByClassName('dis');
 		    let btnDiss = document.getElementsByTagName('button');
-			document.getElementsByTagName('body')[0].setAttribute('onclick','return false');
 		    for(var dis of diss){
-		    	dis.disabled=true;
+		    	if(dis.checked==false){		    		
+		    		dis.disabled=true;
+		    	}
 		    }
 		    for(var dis of btnDiss){
 		    	dis.hidden=true;
 		    }
+			
+			document.getElementById("submitBtn").disabled=false;
+			document.getElementById("submitBtn").hidden=false;
 			clearInterval(countDown);
-			console.log('end');
-			funct();
+			
 		}else{
 			let minutes = Math.floor((remaining / (1000 * 60)));
 			let seconds = Math.floor((remaining  % (1000 * 60)) / 1000);

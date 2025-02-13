@@ -1,3 +1,4 @@
+<%@page import="dao.OptionsDao"%>
 <%@page import="entities.Users"%>
 <%@page import="dao.BatchSectionDao"%>
 <%@page import="entities.Exams"%>
@@ -14,6 +15,12 @@
 <meta charset="ISO-8859-1">
 <title>Exam Evaluation</title>
 <link rel="stylesheet" type="text/css" href="student.css">
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
+	integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA=="
+	crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 	<%@include file="student_nav.jsp"%>
@@ -28,6 +35,7 @@
 	%>
 
 	<%
+	OptionsDao oDao = new OptionsDao(ConnectionProvider.main());
 	BatchSectionDao bsDao = new BatchSectionDao(ConnectionProvider.main());
 	ExamsDao eDao = new ExamsDao(ConnectionProvider.main());
 	ArrayList<QuestionToAnswerePOJO> qaPOJO = new ArrayList<QuestionToAnswerePOJO>();
@@ -45,7 +53,7 @@
 	%>
 
 
-	<div>
+	<div id="pdf_body">
 		<h1><%=e.getExam_name()%></h1>
 		<p>
 			Batch:
@@ -101,6 +109,8 @@
 					<tr>
 						<th>Question</th>
 						<th>Answer</th>
+						<th>Selected Option</th>
+						<th>Verdict</th>
 					</tr>
 					<tbody>
 						<%
@@ -109,6 +119,8 @@
 						<tr>
 							<td><%=qap.getQuestion_statement()%></td>
 							<td><%=qap.getAnswer_statement()%></td>
+							<td><%=oDao.getOptionStatementByOptId(qap.getSelected_option_id())%></td>
+							<td><% if(qap.getAnswer_id()==qap.getSelected_option_id())out.print("Correct");else out.print("Wrong");%></td>
 						</tr>
 						<%
 						}
@@ -119,11 +131,34 @@
 		<hr style="width: 100%; border: 1px solid black;" />
 		<hr style="width: 100%; border: 1px solid black;" />
 	</div>
+		<div style="text-align: center;margin:10px 0px;">
+		<button onclick="funct()">Export as PDF</button>
+		<p style="color:red; font-style: italic; font-weight: bold;">NOTE: YOU WILL NOT ABLE TO SEE IN DETAILS SECOND TIME!</p>
+		</div>
 	<%
 	}
 	session.removeAttribute("current_exam_selected_options");
 	session.removeAttribute("current_exam_evaluation");
 	%>
 		 <script src="./student.js"></script> 
+		 <script type="text/javascript">
+		 
+		 let funct=()=>{
+			 window.jsPDF = window.jspdf.jsPDF;
+			 var myPDF = new jsPDF();
+			 myPDF.html(document.getElementById('pdf_body'),{
+			 	callback: async function(doc){
+			 	await myPDF.save('Submition_of_<%=e.getExam_name()%>.pdf');
+			     await setTimeout(window.close(),10000);
+			 	},
+			 	x:5,
+			 	y:5,
+			 	width:200,
+			 	windowWidth: 1000
+			 })
+			 	};
+		 
+		 
+		 </script>
 </body>
 </html>

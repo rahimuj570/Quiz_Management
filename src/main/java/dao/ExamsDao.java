@@ -172,12 +172,12 @@ public class ExamsDao {
 			// TODO Auto-generated catch block
 			System.out.println(e + " in ExamsDao; getAllQuestioSetId method; line 146");
 		}
-		try {
-			con.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			con.close();
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		return qs;
 	}
 
@@ -294,7 +294,7 @@ public class ExamsDao {
 		if (!courseId.equals("")) {
 			query = query + " and exam_course=" + courseId;
 		}
-		query = query + " order by exam_start desc";
+		query = query + " order by exam_start asc";
 		 System.out.println(query);
 		try {
 			PreparedStatement pst = con.prepareStatement(query);
@@ -340,8 +340,8 @@ public class ExamsDao {
 				query = query + " or ";
 			}
 		}
-		query = query + ") and eqr.qs_id=qsr.qs_id and eqr.exam_id=3 order by rand() limit " + limit;
-		// System.out.println(query);
+		query = query + ") and eqr.qs_id=qsr.qs_id and eqr.exam_id="+exam_id+" order by rand() limit " + limit;
+		 System.out.println(query);
 		try {
 			PreparedStatement pst = con.prepareStatement(query);
 			ResultSet res = pst.executeQuery();
@@ -355,10 +355,11 @@ public class ExamsDao {
 				q.setQ_section(res.getInt("q_section"));
 				q.setQ_statement(res.getString("q_statement"));
 				q.setQ_subject(res.getInt("q_subject"));
-				q.setQ_teacher(res.getInt("q_teacher"));
+				q.setQ_teacher(res.getLong("q_teacher"));
 				qList.add(q);
 			}
 		} catch (SQLException e) {
+			System.out.println("ExamsDao 362");
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -390,15 +391,17 @@ public class ExamsDao {
 				optList.add(opt);
 			}
 		} catch (SQLException e) {
+			System.out.println("examsDao 393");
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			
 		}
-		try {
-			con.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			con.close();
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		return optList;
 	}
 
@@ -636,6 +639,7 @@ public class ExamsDao {
 	}
 
 	public boolean isAlredyPermited(Long id, int exam_id) {
+		con = ConnectionProvider.main();
 		boolean f = false;
 		String query = "select count(*) from exams_permission where exam_id=" + exam_id + " and student_id=" + id;
 		try {
@@ -644,10 +648,18 @@ public class ExamsDao {
 			if (res.next()) {
 				int f2 = res.getInt(1);
 				f = f2 == 0 ? false : true;
+				con.close();
 			}
 		} catch (SQLException e) {
+			
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			try {
+				con.close();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 
 		return f;
